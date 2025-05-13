@@ -1,5 +1,16 @@
 # Notes on learning and running GenErode
 
+## Installation
+
+To install the pipeline I clone the github folder:
+```
+git clone https://github.com/NBISweden/GenErode.git
+```
+and create a conda environment (called `generode`) using the environment.yml file in the folder:
+```
+conda env create -n generode -f environment.yml
+```
+
 ## Configuration files
 
 To run the pipeline two main configuration files need to be modified in the GenErode folder:
@@ -42,3 +53,18 @@ workflow/rules/3.1_bam_rmdup_realign_indels.smk
 
 Since I know that `0.1_reference_genome_preps` and `0.2_repeat_identification` have already been run, I will comment them out in the Snakemake file to avoid unwanted repetitions of these analyses (they shouldn't happen but could by error).
 
+## Run the pipeline
+
+Once all files are ready (regardless of what steps I want to run) I run the pipeline like this:
+```
+# create a screen for the run:
+screen -S <run>
+
+# in the screen prepare the environment:
+module load PDC bioinfo-tools apptainer tmux # not too sure about if we need apptainer
+conda activate generode
+
+# dry run + main run:
+snakemake --profile slurm -n &> <YYMMDD>_dry.out
+snakemake --profile slurm &> <YYMMDD>_main.out
+```
