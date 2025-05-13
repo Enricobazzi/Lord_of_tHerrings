@@ -1,5 +1,6 @@
 **/.DS_Store
 **/.ipynb_checkpoints/
+*.numbers
 
 # data files
 data/sampleinfo_files/P**
