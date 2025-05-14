@@ -1,5 +1,5 @@
 # Purpose: Create metadata file from CSV files I generated for each dataset from 
-# the NCBI SRA database.
+# the NCBI SRA database. This is hard-coded for the datasets we downloaded.
 
 # for the Han et al. 2020 data:
 paste \
