@@ -1,44 +1,199 @@
 # Purpose: Create metadata file from CSV files I generated for each dataset from 
 # the NCBI SRA database. This is hard-coded for the datasets we downloaded.
 
-# for the Han et al. 2020 data:
-paste \
-    <(paste <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f14 | cut -d'_' -f1) \
-        <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f6 | rev | cut -d'_' -f1 | cut -c 1) \
-        <(yes PRJNA642736 | head -113) | tr '\t' '_') \
-    <(paste <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f14 | cut -d'_' -f1) \
-        <(yes PRJNA642736 | head -113) \
-        <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f6 | rev | cut -d'_' -f1 | cut -c 1) \
-        | tr '\t' '.') \
-    <(yes illumina | head -113) \
-    <(paste <(yes '/cfs/klemming/scratch/e/ebazzica/GenErode/data/Han_2020/' | head -113) \
-        <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f1) \
-        <(yes '_1.fastq' | head -113) | tr -d '\t' ) \
-    <(paste <(yes '/cfs/klemming/scratch/e/ebazzica/GenErode/data/Han_2020/' | head -113) \
-        <(tail -n +2 data/published_data/Han_2020_individuals.csv | cut -d',' -f1) \
-        <(yes '_2.fastq' | head -113) | tr -d '\t') \
-    | tr '\t' ' ' >> config/modern_samples_paths.txt
+pdata=/cfs/klemming/projects/supr/naiss2024-6-170/raw_data/published_data
 
-# for the Atmore et al. 2022 data:
-paste \
-    <(paste <(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | cut -d'_' -f3 | tr -d '-') \
-        <(yes "1" | head -52) \
-        <(yes PRJEB52723 | head -52) | tr '\t' '_') \
-    <(paste <(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | cut -d'_' -f3 | tr -d '-') \
-        <(yes PRJEB52723 | head -52) \
-        <(yes "1" | head -52) \
-        | tr '\t' '.') \
-    <(yes illumina | head -52) \
-    <(paste <(yes '/cfs/klemming/projects/supr/naiss2024-6-170/raw_data/published_data/Atmore_et_al2022_2024/' | head -52) \
-        <(
-        for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | cut -d'_' -f3); do
-            grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R1_001
-        done 
-        ) | tr -d '\t') \
-    <(paste <(yes '/cfs/klemming/projects/supr/naiss2024-6-170/raw_data/published_data/Atmore_et_al2022_2024/' | head -52) \
-        <(
-        for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | cut -d'_' -f3); do
-            grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R2_001
-        done 
-        ) | tr -d '\t') \
-    | tr '\t' ' ' >> config/modern_samples_paths.txt
+# add header historic
+# DON'T RUN THIS IF OUR HISTORIC DATA IS ALREADY IN THE TABLE 
+# echo "samplename_index_lane readgroup_id readgroup_platform path_to_R1_fastq_file path_to_R2_fastq_file" \
+#     > config/historical_samples_paths.txt
+
+# add header modern
+echo "samplename_index_lane readgroup_id readgroup_platform path_to_R1_fastq_file path_to_R2_fastq_file" \
+    > config/modern_samples_paths.txt
+
+# for the Atmore et al. 2022 historical individual data:
+project=PRJEB52723
+paste -d' ' \
+    <(
+        for sample in $(grep 'historical' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            n=$(grep -w $sample <(grep 'historical' data/published_data/Atmore_2022.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for sample in $(grep 'historical' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            if [[ $sample != $previous_sample ]]; then
+                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep -v "M-$sample" | grep R1_001))
+                for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for sample in $(grep 'historical' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            if [[ $sample != $previous_sample ]]; then
+                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep -v "M-$sample" | grep R2_001))
+                for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
+                previous_sample=$sample
+            fi
+        done
+    ) >> config/historical_samples_paths.txt
+
+# for the Atmore et al. 2022 modern individual data:
+project=PRJEB52723
+paste -d' ' \
+    <(
+        for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            n=$(grep -w $sample <(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            if [[ $sample != $previous_sample ]]; then
+                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R1_001))
+                for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
+            if [[ $sample != $previous_sample ]]; then
+                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R2_001))
+                for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
+                previous_sample=$sample
+            fi
+        done
+    ) >> config/modern_samples_paths.txt
+
+# for the Atmore et al. 2024 historical individual data:
+project=PRJEB77597
+paste -d ' ' \
+    <(
+        for sample in $(grep 'historical' data/published_data/Atmore_2024.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'historical' data/published_data/Atmore_2024.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(tail -n +2 data/published_data/Atmore_2024.csv | cut -d',' -f1); do
+            echo "${pdata}/Atmore_et_al2022_2024/${run}_1.fastq.gz ${pdata}/Atmore_et_al2022_2024/${run}_2.fastq.gz"
+        done
+    ) >> config/historical_samples_paths.txt
+
+# for Fuentes-Pardo et al. 2024 modern individual data
+project=PRJNA930418
+paste -d' ' \
+    <(
+        for sample in $(grep 'individual' data/published_data/FuentesPardo_2024.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'individual' data/published_data/FuentesPardo_2024.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(grep 'individual' data/published_data/FuentesPardo_2024.csv | cut -d',' -f1); do
+            echo "${pdata}/FuentesPardo_et_al2024/${run}_1.fastq.gz ${pdata}/FuentesPardo_et_al2024/${run}_2.fastq.gz"
+        done
+    ) >> config/modern_samples_paths.txt
+
+# for Han et al. 2020 modern individual data
+project=PRJNA642736
+paste -d' ' \
+    <(
+        for sample in $(grep 'individual' data/published_data/Han_2020.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'individual' data/published_data/Han_2020.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(grep 'individual' data/published_data/Han_2020.csv | cut -d',' -f1); do
+            echo "${pdata}/Han_et_al2020/${run}_1.fastq.gz ${pdata}/Han_et_al2020/${run}_2.fastq.gz"
+        done
+    ) >> config/modern_samples_paths.txt
+
+# for Kongsstovu et al. 2022 modern individual data 
+project=PRJEB25669
+paste -d' ' \
+    <(
+        for sample in $(grep 'individual' data/published_data/Kongsstovu_2022.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'individual' data/published_data/Kongsstovu_2022.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(grep 'individual' data/published_data/Kongsstovu_2022.csv | cut -d',' -f1); do
+            echo "${pdata}/Kongsstovu_et_al2022/${run}_1.fastq.gz ${pdata}/Kongsstovu_et_al2022/${run}_2.fastq.gz"
+        done
+    ) >> config/modern_samples_paths.txt
+
+# for Lamichhaney et al. 2017 modern individual data
+project=PRJNA338612
+paste -d' ' \
+    <(
+        for sample in $(grep 'individual' data/published_data/Lamichhaney_2017.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'individual' data/published_data/Lamichhaney_2017.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(grep 'individual' data/published_data/Lamichhaney_2017.csv | cut -d',' -f1); do
+            echo "${pdata}/Lamichhaney_et_al2017/${run}_1.fastq.gz ${pdata}/Lamichhaney_et_al2017/${run}_2.fastq.gz"
+        done
+    ) >> config/modern_samples_paths.txt
+
+# for Martinez-Barrio et al. 2016 modern individual data
+project=SRP056617
+paste -d' ' \
+    <(
+        for sample in $(grep 'individual' data/published_data/MartinezBarrio_2016.csv | cut -d',' -f14); do
+            n=$(grep -w $sample <(grep 'individual' data/published_data/MartinezBarrio_2016.csv | cut -d',' -f14) | wc -l)
+            if [[ $sample != $previous_sample ]]; then
+                for i in $(seq 1 $n); do
+                    echo "${sample}_${i}_${project} ${sample}.${project}.${i} illumina"
+                done
+                previous_sample=$sample
+            fi
+        done
+    ) \
+    <(
+        for run in $(grep 'individual' data/published_data/MartinezBarrio_2016.csv | cut -d',' -f1); do
+            echo "${pdata}/MartinezBarrio_et_al2016/${run}_1.fastq.gz ${pdata}/MartinezBarrio_et_al2016/${run}_2.fastq.gz"
+        done
+    ) >> config/modern_samples_paths.txt

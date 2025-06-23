@@ -1,0 +1,14 @@
+Run,Bases,BioSample,Experiment,Instrument,Library Name,LibraryLayout,Organism,Platform,Sample_name,SRA Study,sample_type,sex,Sample_code,Date,geo_loc_name,lat,lon,lat_lon,Spawning_time,Era
+ERR3481987,47694284690,SAMEA5866972,ERX3503522,HiSeq X Five,HGS15_NSSH_Atlantic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool2,ERP115035,pool,NA,HGS15,2017,NorwegianSea,67.47,9.47,NA,spring,modern
+ERR3481988,30326938452,SAMEA5866976,ERX3503523,HiSeq X Five,HGS12_BornholmBasin_Baltic_Autumn,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool6,ERP115035,pool,NA,HGS12,2016,Bornholm,55.23,14.94,NA,autumn,modern
+ERR3481989,69102126980,SAMEA5866980,ERX3503524,HiSeq X Five,HGS1_Riga_Baltic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool10,ERP115035,pool,NA,HGS1,2014,Riga,58.28,23.16,NA,spring,modern
+ERR3481992,61629116142,SAMEA5866981,ERX3503527,HiSeq X Five,HGS2_Riga_Baltic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool11,ERP115035,pool,NA,HGS2,2016,Riga,58.28,23.16,NA,spring,modern
+ERR3484416,38940793248,SAMEA5866973,ERX3505951,HiSeq X Five,HGS5_Schlei_Baltic_Autumn,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool3,ERP115035,pool,NA,HGS5,2010,Schlei,54.60,9.85,NA,autumn,modern
+ERR3484417,44954170438,SAMEA5866975,ERX3505952,HiSeq X Five,HGS6_Schlei_Baltic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool5,ERP115035,pool,NA,HGS6,2011,Schlei,54.60,9.85,NA,spring,modern
+ERR3484418,35708857802,SAMEA5866977,ERX3505953,HiSeq X Five,HGS71_Rugen_Baltic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool7,ERP115035,pool,NA,HGS71,2003,Rügen,54.31,13.48,NA,spring,modern
+ERR3484419,67768203248,SAMEA5866978,ERX3505954,HiSeq X Five,HGS4_Riga_Baltic_Autumn,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool8,ERP115035,pool,NA,HGS4,2015,Riga,58.28,23.16,NA,autumn,modern
+ERR3484420,66485311778,SAMEA5866979,ERX3505955,HiSeq X Five,HGS3_Riga_Baltic_Autumn,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool9,ERP115035,pool,NA,HGS3,2014,Riga,58.28,23.16,NA,autumn,modern
+ERR3484421,59140297600,SAMEA5866982,ERX3505956,HiSeq X Five,HGS72_Rugen_Baltic_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool12,ERP115035,pool,NA,HGS72,2009,Rügen,54.31,13.48,NA,spring,modern
+ERR3481986,32764114994,SAMEA5866947,ERX3503521,HiSeq X Five,unspecified,PAIRED,Clupea harengus,ILLUMINA,HGS11_RingköbingFjord_Spring,ERP115035,pool,NA,unspecified,NA,NA,NA,NA,NA,NA,modern
+ERR3485132,32764114994,SAMEA5866974,ERX3506616,HiSeq X Five,HGS11_RingköbingFjord_Spring,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool4,ERP115035,pool,NA,HGS11,2009,RingköbingFjord,56.00,8.20,NA,spring,modern
+ERR3662298,56684057610,SAMEA6224980,ERX3653938,HiSeq X Five,unspecified,PAIRED,Clupea harengus,ILLUMINA,Clupea_harengus_pool14,ERP115035,pool,NA,HGS8,2009,KattegatNorth,57.72,11.70,NA,spring,modern
