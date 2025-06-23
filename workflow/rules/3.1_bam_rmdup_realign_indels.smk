@@ -240,7 +240,7 @@ rule rmdup_modern_bams:
     shell:
         """
         mem=$((({resources.mem_mb} - 2000)/1000))
-        picard MarkDuplicates -Xmx${{mem}}g INPUT={input.merged} OUTPUT={output.rmdup} METRICS_FILE={output.metrix} 2> {log}
+        picard MarkDuplicates -Xmx8g INPUT={input.merged} OUTPUT={output.rmdup} METRICS_FILE={output.metrix} 2> {log}
         """
 
 

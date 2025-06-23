@@ -14,7 +14,7 @@ default-resources:
   slurm_partition: shared # use Dardel’s shared partition
   nodes: 1 # one node on Dardel from the shared partition
   ntasks: 1 # number of concurrent tasks / ranks
-  threads: 20 # number of threads, corresponding to cpus-per-task or cores (adjust per rule under set-threads)
+  threads: 2 # number of threads, corresponding to cpus-per-task or cores (adjust per rule under set-threads)
   runtime: 120 # default runtime in minutes (adjust per rule under set-resources)
   mem_mb: 6400 # default memory in MB (adjust per rule under set-resources)
 ## set-threads: map rule names to threads
@@ -59,6 +59,7 @@ set-threads:
   - subsampled_bam_qualimap=6
 ### genotyping
   - variant_calling=3
+  - sort_vcfs=2
 ### identify CpG sites
   - CpG_genotype_bed_formatting_group=4
   - all_CpG_bed_formatting_group=2
@@ -148,9 +149,9 @@ set-resources:
   - merge_modern_bams_per_index:mem_mb=12800
   - merged_index_bam_qualimap:runtime=720
   - merged_index_bam_qualimap:mem_mb=51200
-  - rmdup_historical_bams:runtime=1080
+  - rmdup_historical_bams:runtime=720
   - rmdup_historical_bams:mem_mb=64000
-  - rmdup_modern_bams:runtime=1080
+  - rmdup_modern_bams:runtime=720
   - rmdup_modern_bams:mem_mb=64000
   - rmdup_bam_qualimap:runtime=720
   - rmdup_bam_qualimap:mem_mb=51200
@@ -162,7 +163,7 @@ set-resources:
   - merged_sample_bam_qualimap:mem_mb=51200
   - indel_realigner_targets:runtime=720
   - indel_realigner_targets:mem_mb=51200
-  - indel_realigner:runtime=720
+  - indel_realigner:runtime=1080
   - indel_realigner:mem_mb=51200
   - realigned_bam_qualimap:runtime=720
   - realigned_bam_qualimap:mem_mb=51200
@@ -186,7 +187,8 @@ set-resources:
 ### genotyping
   - variant_calling:runtime=2880
   - variant_calling:mem_mb=19200
-  - sort_vcfs:runtime=1440
+  - sort_vcfs:runtime=720
+  - sort_vcfs:mem_mb=128000
 ### identify CpG sites
   - sorted_bcf2vcf:runtime=300
   - make_CpG_genotype_bed:runtime=720
