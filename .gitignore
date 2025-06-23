@@ -2,8 +2,12 @@
 **/.ipynb_checkpoints/
 *.numbers
 
+plots
+
 # data files
 data/sampleinfo_files/P**
+data/iucn_shp
+data/summary_screening
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
