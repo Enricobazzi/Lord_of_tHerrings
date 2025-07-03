@@ -1,7 +1,7 @@
 # Configuration file for slurm plugin (Snakemake >8.0.0) for Dardel cluster at PDC/KTH
 # snakemake CLI flags
 executor: slurm
-jobs: 100
+jobs: 1000
 printshellcmds: true
 software-deployment-method: apptainer
 use-apptainer: True
@@ -32,7 +32,7 @@ set-threads:
   - fastqc_historical_unmerged=2
   - fastqc_modern_trimmed=2
 ### map to reference genome
-  - map_historical=8
+  - map_historical=16
   - sai2bam=8
   - map_modern=8
   - sorted_bam_qualimap=8
@@ -174,9 +174,9 @@ set-resources:
     mem_mb: 12800
 ### map to reference genome
   map_historical:
-    cpus_per_task: 8
-    runtime: 2880
-    mem_mb: 51200
+    cpus_per_task: 16
+    runtime: 7200
+    mem_mb: 25600
   sai2bam:
     cpus_per_task: 8
     runtime: 2880
