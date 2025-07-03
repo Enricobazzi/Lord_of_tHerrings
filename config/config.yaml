@@ -131,7 +131,7 @@ mapping: False
 # remove duplicates, merge BAM files per sample, realign indels, 
 # calculate average genome-wide depth of coverage for depth filtering
 # of BAM and VCF files.
-bam_rmdup_realign_indels: False
+bam_rmdup_realign_indels: True
 
 # Parameters related to depth filtering of BAM and VCF files.
 # After BAM file processing, the average genome-wide depth is calculated 
@@ -226,7 +226,7 @@ subsampling_samplenames: []
 # Required for CpG filtering of BAM files for mlRho, ROH estimation, 
 # PCA plotting, SNP annotation, and relative mutational load calculations 
 # (from GERP scores).
-genotyping: True
+genotyping: False
 #####
 
 
@@ -247,7 +247,7 @@ genotyping: True
 # below to True and specify samples in the list below in 
 # which CpG sites should be identified and/or from which 
 # CpG sites should be removed.
-CpG_identification: True
+CpG_identification: False
 
 # Method 1: 
 # Identify CpG sites in single-individual VCF files of samples 
@@ -266,7 +266,7 @@ CpG_from_vcf: False
 # Has to be kept at True for the rest of the pipeline, if chosen 
 # method for CpG identification, so that the correct files are 
 # used for downstream analyses.
-CpG_from_reference: True
+CpG_from_reference: False
 
 # Method 3: 
 # Identify CpG sites in single-individual VCF files and in the 
@@ -347,7 +347,7 @@ mlRho_autosomes_sexchromosomes: False
 # OPTIONAL: 
 # Remove CpG sites from BCF files of of historical and modern samples 
 # specified in the list "CpG_samplenames" under "CpG_identification".
-vcf_CpG_filtering: True
+vcf_CpG_filtering: False
 #####
 
 
@@ -355,7 +355,7 @@ vcf_CpG_filtering: True
 # Filter BCF files of historical and modern samples for quality, 
 # depth (based on parameters set above), indels, allelic imbalance, 
 # and remove repeat regions that were identified in the reference genome.
-vcf_qual_repeat_filtering: True
+vcf_qual_repeat_filtering: False
 #####
 
 
