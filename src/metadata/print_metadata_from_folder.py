@@ -10,7 +10,7 @@ def parse_args():
         description='Print metadata file (no header) from folder with sequencing data'
     )
     parser.add_argument(
-        'idir',
+        '--idir',
         type=str,
         help='Path to the sequencing directory - Needs to be absolute if you want absolute paths to R1 and R2 files'
     )
@@ -42,112 +42,77 @@ def get_si_df(seq_dir):
     sample_info_file = sample_info_files[0]
     return pd.read_csv(sample_info_file, sep='\t')
 
-def get_samples(si_df):
+def get_ngi_ids(si_df):
     """
     Get the samples from the sample_info file.
     """
     # get the samples
-    samples = [str(s) for s in si_df['User ID']]
-    return samples
+    ngi_ids = [str(s) for s in si_df['NGI ID']]
+    return ngi_ids
 
-def get_idx(sample):
+def get_sample_and_idx_from_ngi_id(ngi_id, si_df):
     """
-    Get the index from the sample name.
+    Get the sample from the sample_info file based on the NGI ID.
     """
-    if len(sample.split('_')) > 1:
-        idx = sample.split('_')[1]
-    else:
-        idx = 1
-    return idx
+    # get the sample
+    sample_idx = si_df[si_df['NGI ID'] == ngi_id]["User ID"]
+    samples = [str(s).split('_')[0] for s in sample_idx]
+    idxs = [int(s.split('_')[1]) for s in sample_idx]
+    if len(samples) == 0:
+        raise ValueError(f'No sample found for NGI ID {ngi_id}')
+    if len(samples) > 1:
+        raise ValueError(f'More than one sample found for NGI ID {ngi_id}')
+    sample = samples[0]
+    if len(idxs) == 0:
+        raise ValueError(f'No index found for NGI ID {ngi_id}')
+    if len(idxs) > 1:
+        raise ValueError(f'More than one index found for NGI ID {ngi_id}')
+    idx = idxs[0]
+    return sample, idx
 
-def get_ngi_id(sample, si_df):
+def get_rgids_lanes_fastqs_pairs_from_lst(lst_file, seq_dir):
     """
-    Get the NGI ID from the sample name.
+    Get the fastq files from the .lst file.
     """
-    ngi_id = si_df.loc[si_df['User ID'] == sample, 'NGI ID'].values[0]
-    return ngi_id
-
-def get_r1_r2(lst_files, ngi_id, seq_dir):
-    """
-    Get the R1 and R2 files from the lst file.
-    """
-    # get the lst file for the ngi_id
-    lst = [
-        lst for lst in lst_files if ngi_id in lst
-    ]
-    if len(lst) == 0:
-        raise ValueError(f'No lst file found for the sample {ngi_id}')
-    if len(lst) > 1:
-        raise ValueError(f'More than one lst file found for the sample {ngi_id}')
-    lst = lst[0]
-    # read the lst file
-    with open(lst, 'r') as f:
+    with open(lst_file, 'r') as f:
         lines = f.readlines()
-    if len(lines) == 0:
-        raise ValueError(f'No lines found in the lst file: {lst}')
-    # get the R1 and R2 lines
-    r1 = [l for l in lines if 'R1' in l]
-    r2 = [l for l in lines if 'R2' in l]
-    if len(r1) == 0:
-        raise ValueError(f'No R1 line found in the lst file: {lst}')
-    if len(r2) == 0:
-        raise ValueError(f'No R2 line found in the lst file: {lst}')
-    if len(r1) > 1:
-        raise ValueError(f'More than one R1 line found in the lst file: {lst}')
-    if len(r2) > 1:
-        raise ValueError(f'More than one R2 line found in the lst file: {lst}')
-    r1 = f'{seq_dir}/{r1[0]}'
-    r2 = f'{seq_dir}/{r2[0]}'
-    return r1.strip(), r2.strip()
-
-def get_lane(r1, r2):
-    """
-    Get the lane number from the R1 and R2 files.
-    """
-    # get the lane number from the R1 and R2 files
-    lane = r1.split('/')[-1].split('_')[3]
-    if lane != r2.split('/')[-1].split('_')[3]:
-        raise ValueError(f'Lane number is different in R1 and R2 files: {lane} and {r2.split("/")[-1].split("_")[3]}')
-    return lane
-
-def get_sample_line(sample, idx, lane, r1, r2):
-    """
-    Get the sample line from the sample name.
-    """
-    if '_' in sample:
-        sample_name = sample.split('_')[0]
-    else:
-        sample_name = sample
-    # get the sample line from the sample name
-    sample_line = f'{sample_name}_{idx}_{lane} {sample_name}.{lane}.{idx} illumina {r1} {r2}'
-    return sample_line
+    fastqs = [line.strip() for line in lines if line.strip().endswith('.fastq.gz')]
+    if len(fastqs) == 0:
+        raise ValueError(f'No fastq files found in {lst_file}')
+    if len(fastqs) % 2 != 0:
+        raise ValueError(f'Uneven number of fastq files found in {lst_file}')
+    # create pairs based on same name where the ending is:
+    # R1_001.fastq.gz in one and R2_001.fastq.gz in the other
+    fastq_bases = set([f.replace('_R1_001.fastq.gz', '').replace('_R2_001.fastq.gz', '') for f in fastqs])
+    fastq_pairs = [f'{seq_dir}/{fb}_R1_001.fastq.gz {seq_dir}/{fb}_R2_001.fastq.gz' for fb in fastq_bases]
+    # lane is assumed to be the third element in the fastq base name
+    lanes = [fb.split('/')[-1].split('_')[3] for fb in fastq_bases]
+    # Rigid ID is assumed to be the last element in the name of the folder with the fastq files
+    rgids = [fb.split('/')[-2].split('_')[-1] for fb in fastq_bases]
+    if len(rgids) != len(lanes):
+        raise ValueError('Number of RGIDs and lanes do not match')
+    if len(lanes) != len(fastq_pairs):
+        raise ValueError('Number of lanes and fastq pairs do not match')
+    if len(set(lanes)) != len(lanes):
+        raise ValueError('Lanes are not unique')
+    return rgids, lanes, fastq_pairs
 
 def main():
-    """
-    Main function to create the metadata file.
-    """
     args = parse_args()
     seq_dir = args.idir
     if not os.path.exists(seq_dir):
         raise ValueError(f'Sequence directory {seq_dir} does not exist')
-
-    # get the list of .lst files
-    lst_files = get_lst_files(seq_dir)
-
-    # get the sample_info file
     si_df = get_si_df(seq_dir)
+    ngi_ids = get_ngi_ids(si_df)
+    for ngi_id in ngi_ids:
+        sample, idx = get_sample_and_idx_from_ngi_id(ngi_id, si_df)
+        lst_file = f'{seq_dir}/{ngi_id}.lst'
+        if not os.path.exists(lst_file):
+            raise ValueError(f'No .lst file found for NGI ID {ngi_id}')
+        rgids, lanes, fastqs = get_rgids_lanes_fastqs_pairs_from_lst(lst_file, seq_dir)
+        for i in range(len(lanes)):
+            print(f'{sample}_{idx}_{lanes[i]} {rgids[i]}.{lanes[i]}.{idx} illumina {fastqs[i]}')
 
-    # get the samples
-    samples = get_samples(si_df)
-
-    # print the metadata file
-    for sample in samples:
-        idx = get_idx(sample)
-        ngi_id = get_ngi_id(sample, si_df)
-        r1, r2 = get_r1_r2(lst_files, ngi_id, seq_dir)
-        lane = get_lane(r1, r2)
-        sample_line = get_sample_line(sample, idx, lane, r1, r2)
-        print(sample_line)
-    
 if __name__ == '__main__':
     main()
+

@@ -62,7 +62,8 @@ paste -d' ' \
     <(
         for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
             if [[ $sample != $previous_sample ]]; then
-                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R1_001))
+                msample=$(echo $sample | sed 's/M/M-/')
+                fqs=($(grep $msample data/published_data/atamore_et_al2022_2024.lst | grep R1_001))
                 for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
                 previous_sample=$sample
             fi
@@ -71,7 +72,8 @@ paste -d' ' \
     <(
         for sample in $(grep 'modern' data/published_data/Atmore_2022.csv | cut -d',' -f14 | sort -u); do
             if [[ $sample != $previous_sample ]]; then
-                fqs=($(grep $sample data/published_data/atamore_et_al2022_2024.lst | grep R2_001))
+                msample=$(echo $sample | sed 's/M/M-/')
+                fqs=($(grep $msample data/published_data/atamore_et_al2022_2024.lst | grep R2_001))
                 for fq in ${fqs[*]}; do echo "${pdata}/Atmore_et_al2022_2024/${fq}"; done
                 previous_sample=$sample
             fi
