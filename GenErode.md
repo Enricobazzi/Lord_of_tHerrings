@@ -23,6 +23,9 @@ I have replicated these here locally to easily modify them, but they should be l
 ```
 scp config/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/GenErode/config/config.yaml
 scp slurm/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/GenErode/slurm/config.yaml
+
+scp config_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/config/config.yaml
+scp slurm_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/slurm/config.yaml
 ```
 
 ## Samples MetaData files
@@ -31,6 +34,19 @@ To run alignments on a group of samples I need to create metadata files for both
 
 Description on how to fill the information in these can be found at:
 https://github.com/NBISweden/GenErode/wiki/2.-Requirements-&-pipeline-configuration#1-prepare-metadata-files-of-samples
+
+*MY SCRIPT TO OBTAIN METADATA FOR NEWLY SEQUENCED*
+```
+# header first
+echo "samplename_index_lane readgroup_id readgroup_platform path_to_R1_fastq_file path_to_R2_fastq_file" \
+    > historical_samples_paths.txt
+
+# you need pandas - my base env on dardel has it installed
+conda activate
+pmff=/cfs/klemming/home/e/ebazzica/scripts/print_metadata_from_folder.py
+python ${pmff} --idir /cfs/klemming/projects/supr/naiss2024-6-170/raw_data/Herring_DeepSeq_2/files/P36109 \
+    >> historical_samples_paths.txt
+```
 
 ## Run alignments
 
@@ -61,7 +77,7 @@ Once all files are ready (regardless of what steps I want to run) I run the pipe
 screen -S <run>
 
 # in the screen prepare the environment:
-module load PDC bioinfo-tools apptainer tmux # not too sure about if we need apptainer
+module load PDC bioinfo-tools apptainer tmux
 conda activate generode
 
 # dry run + main run:
