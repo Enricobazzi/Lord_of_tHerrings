@@ -219,3 +219,25 @@ ggsave("plots/screening/map_final.pdf", plot = map_final, height = 6, width = 8)
 leaf_final <- leaf_coords(plot_final)
 saveWidget(leaf_final, "plots/screening/map_final.html", selfcontained = TRUE)
 
+######### ######### ######### #########
+######### ######### ######### #########
+
+plot_map <- function(){
+  # Load shapefile as sp object
+  world_map_sp <- rgdal::readOGR("~/Documents/Lynxtrogression_v2/plots/ms_figures/ne_50m_land/ne_50m_land.shp")
+  # Convert to sf object
+  world_map_sf <- st_as_sf(world_map_sp)
+  # Plot
+  wm <- ggplot() +
+    geom_sf(data = world_map_sf, fill = "grey50", color = "grey50") +
+    coord_sf(
+      xlim = c(-18, 38),
+      ylim = c(30, 72.5),
+      expand = FALSE,
+      default_crs = st_crs(world_map_sf)
+    ) +
+    theme_void()
+  return(wm)
+}
+ggsave("plots/map.png", plot_map())
+
