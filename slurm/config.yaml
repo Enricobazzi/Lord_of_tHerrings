@@ -1,7 +1,7 @@
 # Configuration file for slurm plugin (Snakemake >8.0.0) for Dardel cluster at PDC/KTH
 # snakemake CLI flags
 executor: slurm
-jobs: 1000
+jobs: 200
 printshellcmds: true
 software-deployment-method: apptainer
 use-apptainer: True
@@ -135,7 +135,7 @@ set-resources:
   fastp_historical:
     cpus_per_task: 4
     runtime: 360
-    mem_mb: 25600
+    mem_mb: 52000
   fastp_modern:
     cpus_per_task: 4
     runtime: 360
