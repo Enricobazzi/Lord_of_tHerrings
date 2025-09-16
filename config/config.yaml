@@ -247,7 +247,7 @@ genotyping: False
 # below to True and specify samples in the list below in 
 # which CpG sites should be identified and/or from which 
 # CpG sites should be removed.
-CpG_identification: False
+CpG_identification: True
 
 # Method 1: 
 # Identify CpG sites in single-individual VCF files of samples 
@@ -266,7 +266,7 @@ CpG_from_vcf: False
 # Has to be kept at True for the rest of the pipeline, if chosen 
 # method for CpG identification, so that the correct files are 
 # used for downstream analyses.
-CpG_from_reference: False
+CpG_from_reference: True
 
 # Method 3: 
 # Identify CpG sites in single-individual VCF files and in the 
@@ -347,7 +347,7 @@ mlRho_autosomes_sexchromosomes: False
 # OPTIONAL: 
 # Remove CpG sites from BCF files of of historical and modern samples 
 # specified in the list "CpG_samplenames" under "CpG_identification".
-vcf_CpG_filtering: False
+vcf_CpG_filtering: True
 #####
 
 
@@ -355,7 +355,7 @@ vcf_CpG_filtering: False
 # Filter BCF files of historical and modern samples for quality, 
 # depth (based on parameters set above), indels, allelic imbalance, 
 # and remove repeat regions that were identified in the reference genome.
-vcf_qual_repeat_filtering: False
+vcf_qual_repeat_filtering: True
 #####
 
 
