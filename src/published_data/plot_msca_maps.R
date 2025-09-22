@@ -52,13 +52,29 @@ dev.off()
 ####
 t <- load_layers("MS_biogeo13_sst_mean_5m")
 her_points <- read.table("data/published_data_samples_coords_parsed.csv", sep = ',', header = T)
-# her_points <- her_points[!grepl("MHER", her_points$id), ]
+
+# screen_df <- read.table("data/summary_screening/summary_screening.nocommanospace.tsv",
+#                         sep = "\t", header = TRUE)
+# screen_df$id <- screen_df$ID
+# screen_df$x1 <- screen_df$x
+# screen_df$y1 <- screen_df$y
+# screen_df$x <- screen_df$y1
+# screen_df$y <- screen_df$x1
+# her_points <- rbind(
+#   data.frame(her_points[,c(1,2,3)]),
+#   data.frame(screen_df[,c(26,24,25)])
+#                     )
+# her_points <- her_points[!grepl("ND159", her_points$id), ]
+
 coordinates(her_points) <- ~ y + x
 crs(her_points) <- crs(t)
 t <- projectRaster(t, crs = CRS("+init=EPSG:3035"), method = "bilinear")
 her_points <- spTransform(her_points, CRS("+init=EPSG:3035"))
 
 plot(crop(t,extent(-2500000, 11000000, 2500000, 12000000)), col = my_colors(30), axes = T, box = F, colNA = NA)
+plot(crop(t,extent(-90, -40, 40, 65)), col = my_colors(30), axes = T, box = F, colNA = NA)
+plot(crop(t,extent(-20, 60, 45, 75)), col = my_colors(30), axes = T, box = F, colNA = NA)
+plot(t, col = my_colors(30), axes = T, box = F, colNA = NA)
 plot(her_points, pch = 21, cex = 0.5, add = T)
 
 t_her <- crop(t,extent(-140, 150, 30, 80))
