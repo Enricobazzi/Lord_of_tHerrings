@@ -8,7 +8,6 @@ Two columns are created for each population (one for reference allele counts and
 NA values are replaced with 0 counts, and the data is converted to integers.
 """
 import pandas as pd
-import os
 
 # info table with sample sizes for each population
 info_table = "data/selection_scans_poolseq/poolseqdata_info.csv"
@@ -41,10 +40,11 @@ for n in range(1, 501):
         ac[f'{col}_alt'] = round(af[col] * sample_size_value)
         ac[f'{col}_ref'] = sample_size_value - ac[f'{col}_alt']
     # set missing data to 0
+    nona_snps = ac.dropna().shape[0]
     ac = ac.fillna(0)
     # convert to int
     ac = ac.astype(int)
     # save ac file - without index and header (only data)
     out_file = f"data/selection_scans_poolseq/subsets_acs/60.Neff.{nn}.ac"
     ac.to_csv(out_file, sep="\t", index=False, header=False)
-    print(f'Saved {out_file} with shape {ac.shape} and {ac.dropna().shape[0]} SNPs with no NA values')
+    print(f'Saved {out_file} with shape {ac.shape} and {nona_snps} SNPs with no NA values')
