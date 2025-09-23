@@ -1,3 +1,10 @@
+# Install Baypass
+```
+git clone git@forge.inrae.fr:mathieu.gautier/baypass_public.git
+unzip baypass_public-v3.1.zip
+cd baypass_public-v3.1/sources
+make clean all FC=gfortran
+```
 # Input preparation
 
 ## Allele Count file
@@ -18,4 +25,23 @@ python src/selection_scans_poolseq/generate_ac_files.py
 
 ## Environmental Data file
 
+```
+Rscript src/selection_scans_poolseq/get_env_data.R
+```
+
 ## Population Structure Correction (omega-matrix) file
+
+```
+baypass_public-v3.1/sources/g_baypass -npop 53 -gfile 60.Neff.001.ac
+```
+
+# Run!
+
+```
+baypass_public-v3.1/sources/g_baypass -npop 53 \
+    -gfile 60.Neff.001.ac \
+    -efile sst_mean.txt \
+    -auxmodel -scalecov \
+    -omegafile mat_omega.out \
+    -outprefix sst_001
+```
