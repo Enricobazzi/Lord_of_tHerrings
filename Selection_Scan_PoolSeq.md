@@ -33,7 +33,6 @@ Rscript src/selection_scans_poolseq/get_env_data.R
 
 ```
 for n in {1..500}; do
-for n in 40 41 90 91; do
     nn=$(printf "%03d\n" "$n")
     sbatch \
         --job-name=${nn}_core \
@@ -48,7 +47,7 @@ done
 ## on indiviudal datasets
 
 ```
-for n in {1..30}; do
+for n in {1..500}; do
     nn=$(printf "%03d\n" "$n")
     sbatch \
         --job-name=${nn}_aux \
