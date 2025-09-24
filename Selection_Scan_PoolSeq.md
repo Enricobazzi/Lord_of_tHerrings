@@ -32,16 +32,34 @@ Rscript src/selection_scans_poolseq/get_env_data.R
 ## Population Structure Correction (omega-matrix) file
 
 ```
-baypass_public-v3.1/sources/g_baypass -npop 53 -gfile 60.Neff.001.ac
+for n in {1..500}; do
+for n in 40 41 90 91; do
+    nn=$(printf "%03d\n" "$n")
+    sbatch \
+        --job-name=${nn}_core \
+        --output=logs/core/${nn}.out \
+        --error=logs/core/${nn}.err \
+        baypass_core.sh ${nn}     
+done
 ```
 
 # Run!
 
+## on indiviudal datasets
+
 ```
-baypass_public-v3.1/sources/g_baypass -npop 53 \
-    -gfile 60.Neff.001.ac \
-    -efile sst_mean.txt \
-    -auxmodel -scalecov \
-    -omegafile mat_omega.out \
-    -outprefix sst_001
+for n in {1..30}; do
+    nn=$(printf "%03d\n" "$n")
+    sbatch \
+        --job-name=${nn}_aux \
+        --output=logs/aux/${nn}.out \
+        --error=logs/aux/${nn}.err \
+        baypass_aux.sh ${nn}     
+done
+```
+
+## join results
+
+```
+
 ```
