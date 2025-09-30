@@ -11,10 +11,12 @@ make clean all FC=gfortran
 
 generate 500 SNP subsets
 ```
-awk -v n=500 '{
-    file = sprintf("data/selection_scans_poolseq/subsets_freqs/60.Neff.%03d.freq", ((NR-1) % n) + 1);
-    print >> file
-    close(file)
+awk 'NR>1 {
+  n = ((NR-2) % 500) + 1         # which sequence (1..500)
+  nn = sprintf("%03d", n)        # zero-padded filename part
+  out = "data/selection_scans_poolseq/subsets_freqs/60.Neff." nn ".freq"
+  print >> out
+  close(out)
 }' data/published_data/60.Neff.freq
 ```
 
@@ -60,5 +62,4 @@ done
 ## join results
 
 ```
-
 ```
