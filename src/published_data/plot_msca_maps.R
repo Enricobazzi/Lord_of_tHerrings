@@ -17,7 +17,8 @@ t <- load_layers("MS_biogeo15_sst_max_5m")
 t <- projectRaster(t, crs = CRS("+init=EPSG:3035"), method = "bilinear")
 s <- load_layers("MS_biogeo08_sss_mean_5m")
 s <- projectRaster(s, crs = CRS("+init=EPSG:3035"), method = "bilinear")
-# plot(crop(t,extent(-15, 25, 65, 85)), col = my_colors(30), axes = T, box = F, colNA = NA)
+
+#plot(crop(s,extent(-15, 25, 50, 70)), col = my_colors(30), axes = T, box = F, colNA = NA)
 
 cod_ext <- extent(2750000, 5500000, 2500000, 6500000)
 t_cod <- crop(t, cod_ext)
@@ -149,8 +150,3 @@ plot(var_df$MS_biogeo13_sst_mean_5m, var_df$MS_biogeo08_sss_mean_5m,
 
 ggplot(var_df, aes(x=sample, y=MS_biogeo08_sss_mean_5m)) + 
   geom_bar(stat = "identity")
-
-
-
-
-
