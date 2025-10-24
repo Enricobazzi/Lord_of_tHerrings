@@ -1,0 +1,493 @@
+# Configuration file for slurm plugin (Snakemake >8.0.0) for Dardel cluster at PDC/KTH
+# snakemake CLI flags
+executor: slurm
+jobs: 300
+printshellcmds: true
+software-deployment-method: apptainer
+use-apptainer: True
+apptainer-args: "-B /cfs/klemming"
+
+# slurm resources
+## default-resources: applied to all jobs, overruled by resources defined below for jobs
+default-resources: 
+  slurm_account: naiss2025-22-1002 # update this to your slurm account
+  slurm_partition: shared # use Dardel’s shared partition
+  nodes: 1 # one node on Dardel from the shared partition
+  ntasks: 1 # number of concurrent tasks / ranks
+  threads: 2 # number of threads, corresponding to cpus-per-task or cores (adjust per rule under set-threads)
+  runtime: 120 # default runtime in minutes (adjust per rule under set-resources)
+  mem_mb: 12800 # default memory in MB (adjust per rule under set-resources)
+## set-threads: map rule names to threads
+set-threads:
+### repeat identification
+  - repeatmodeler=16
+  - repeatmasker=16
+### fastq processing
+  - historical_fastq_before_group=2
+  - fastqc_historical_raw=2
+  - fastqc_modern_raw=2
+  - fastp_historical=4
+  - fastp_modern=4
+  - fastqc_historical_merged=2
+  - fastqc_historical_unmerged=2
+  - fastqc_modern_trimmed=2
+### map to reference genome
+  - map_historical=16
+  - sai2bam=8
+  - map_modern=8
+  - sorted_bam_qualimap=8
+### process bam files
+  - merge_historical_bams_per_index=2
+  - merge_modern_bams_per_index=2
+  - merged_index_bam_qualimap=8
+  - rmdup_historical_bams=6
+  - rmdup_modern_bams=2
+  - rmdup_bam_qualimap=8
+  - merge_historical_bams_per_sample=2
+  - merge_modern_bams_per_sample=2
+  - merged_sample_bam_qualimap=8
+  - indel_realigner_targets=8
+  - indel_realigner=8
+  - realigned_bam_qualimap=8
+  - realigned_bam_group=2
+  - realigned_bam_depth=2
+### rescale bam files
+  - rescale_historical=4
+  - rescaled_bam_qualimap=8
+  - rescaled_bam_group=2
+### subsample bam files
+  - subsample_bams=2
+  - subsampled_bam_qualimap=6
+### genotyping
+  - variant_calling=3
+  - sort_vcfs=2
+### identify CpG sites
+  - CpG_genotype_bed_formatting_group=4
+  - all_CpG_bed_formatting_group=2
+  - make_noCpG_bed=2
+  - CpG_repeats_bed_formatting_group=2
+  - merge_noCpG_noRepeats_beds=2
+  - make_noCpG_repma_bed=2
+### create chromosome bed files
+  - intersect_sexchr_repma_beds=2
+  - intersect_autos_repma_beds=2
+  - intersect_sexchr_CpG_repma_beds=2
+  - intersect_autos_CpG_repma_beds=2
+### CpG filter VCF files
+  - remove_CpG_vcf=6
+  - CpG_vcf2bcf=2
+### process VCF files
+  - remove_snps_near_indels=2
+  - filter_vcfs_qual_dp=2
+  - filter_vcfs_allelic_balance=2
+  - remove_repeats_vcf=6
+  - filtered_vcf2bcf=2
+### merge and process VCF files
+  - merge_all_vcfs=6
+  - filter_vcf_biallelic=2
+  - filter_vcf_missing=2
+  - remove_chromosomes=2
+  - repmasked_bcf2vcf=2
+  - filter_biallelic_missing_vcf=6
+### PCA
+  - vcf2plink_pca=2
+### runs of homozygosity
+  - filter_vcf_hwe=2
+  - vcf2plink_hwe=2
+### gerp
+  - outgroup_fastqc=2
+  - align2target=8
+  - bam2fasta=2
+  - concatenate_fasta_per_contig=2
+  - compute_gerp=4
+  - gerp2coords=2
+  - get_ancestral_state=2
+  - produce_contig_out=2
+  - merge_gerp_per_chunk=2
+  - merge_gerp_gz=2
+  - gerp_derived_alleles=2
+  - merge_gerp_alleles_per_chunk=4
+  - merge_gerp_alleles_gz=4
+  - relative_mutational_load_per_sample=2
+## set-resources: map rule names to resources in general
+set-resources:
+### repeat identification
+  repeatmodeler:
+    cpus_per_task: 16
+    runtime: 2880
+    mem_mb: 102400
+  repeatmasker:
+    cpus_per_task: 16
+    runtime: 2880
+    mem_mb: 102400
+### fastq processing
+  historical_fastq_before_group:
+    cpus_per_task: 2
+    runtime: 360
+    mem_mb: 12800
+  fastqc_historical_raw:
+    cpus_per_task: 2
+    runtime: 120
+    mem_mb: 12800
+  fastqc_modern_raw:
+    cpus_per_task: 2
+    runtime: 120
+    mem_mb: 12800
+  fastp_historical:
+    cpus_per_task: 4
+    runtime: 360
+    mem_mb: 52000
+  fastp_modern:
+    cpus_per_task: 4
+    runtime: 360
+    mem_mb: 25600
+  fastqc_historical_merged:
+    cpus_per_task: 2
+    mem_mb: 12800
+  fastqc_historical_unmerged:
+    cpus_per_task: 2
+    runtime: 120
+    mem_mb: 12800
+  fastqc_modern_trimmed:
+    cpus_per_task: 2
+    runtime: 120
+    mem_mb: 12800
+### map to mitochondrial genomes
+  map_historical_merged_to_mito:
+    cpus_per_task: 2
+    runtime: 360
+    mem_mb: 12800
+  map_historical_unmerged_to_mito:
+    cpus_per_task: 2
+    runtime: 360
+    mem_mb: 12800
+  historical_mito_bams_group:
+    cpus_per_task: 2
+    runtime: 2880
+    mem_mb: 12800
+  merge_historical_mitogenome_bams_per_sample:
+    cpus_per_task: 2
+    runtime: 2880
+    mem_mb: 12800
+  historical_merged_mito_bams_group:
+    cpus_per_task: 2
+    runtime: 2880
+    mem_mb: 12800
+### map to reference genome
+  map_historical:
+    cpus_per_task: 16
+    runtime: 7200
+    mem_mb: 25600
+  sai2bam:
+    cpus_per_task: 8
+    runtime: 2880
+    mem_mb: 51200
+  map_modern:
+    cpus_per_task: 8
+    runtime: 2880
+    mem_mb: 51200
+  sorted_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 2880
+    mem_mb: 51200
+### process bam files
+  merge_historical_bams_per_index:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merge_modern_bams_per_index:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merged_index_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 720
+    mem_mb: 51200
+  rmdup_historical_bams:
+    cpus_per_task: 6
+    runtime: 720
+    mem_mb: 64000
+  rmdup_modern_bams:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 64000
+  rmdup_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 720
+    mem_mb: 51200
+  merge_historical_bams_per_sample:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merge_modern_bams_per_sample:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merged_sample_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 720
+    mem_mb: 51200
+  indel_realigner_targets:
+    cpus_per_task: 8
+    runtime: 720
+    mem_mb: 51200
+  indel_realigner:
+    cpus_per_task: 8
+    runtime: 1080
+    mem_mb: 51200
+  realigned_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 720
+    mem_mb: 51200
+  realigned_bam_group:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  realigned_bam_depth:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 24000
+### rescale bam files
+  rescale_historical:
+    cpus_per_task: 4
+    runtime: 7200
+    mem_mb: 25600
+  rescaled_bam_qualimap:
+    cpus_per_task: 8
+    runtime: 1440
+    mem_mb: 51200
+  rescaled_bam_group:
+    cpus_per_task: 2
+    runtime: 600
+    mem_mb: 12800
+### subsample bam files
+  subsample_bams:
+    cpus_per_task: 2
+    runtime: 2160
+    mem_mb: 12800
+  subsampled_bam_qualimap:
+    cpus_per_task: 6
+    runtime: 2160
+    mem_mb: 38400
+### genotyping
+  variant_calling:
+    cpus_per_task: 3
+    runtime: 2880
+    mem_mb: 19200
+  sort_vcfs:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 128000
+### identify CpG sites
+  sorted_bcf2vcf:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  make_CpG_genotype_bed:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  make_noCpG_bed:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  CpG_genotype_bed_formatting_group:
+    cpus_per_task: 4
+    runtime: 720
+    mem_mb: 25600
+  all_CpG_bed_formatting_group:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  make_noCpG_bed:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  CpG_repeats_bed_formatting_group:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merge_noCpG_noRepeats_beds:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  make_noCpG_repma_bed:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### create chromosome bed files
+  make_autosomes_bed:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  intersect_sexchr_repma_beds:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  intersect_autos_repma_beds:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  intersect_sexchr_CpG_repma_beds:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  intersect_autos_CpG_repma_beds:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### CpG filter VCF files
+  remove_CpG_vcf:
+    cpus_per_task: 6
+    runtime: 300
+    mem_mb: 38400
+  CpG_vcf2bcf:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### process VCF files
+  remove_snps_near_indels:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  filter_vcfs_qual_dp:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  filter_vcfs_allelic_balance:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  remove_repeats_vcf:
+    cpus_per_task: 6
+    runtime: 300
+    mem_mb: 38400
+  filtered_vcf2bcf:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### merge and process VCF files
+  merge_all_vcfs:
+    cpus_per_task: 6
+    runtime: 1440
+    mem_mb: 38400
+  filter_vcf_biallelic:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  filter_vcf_missing:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  remove_chromosomes:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  extract_historical_samples:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  extract_modern_samples:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  repmasked_bcf2vcf:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  filter_biallelic_missing_vcf:
+    cpus_per_task: 6
+    runtime: 720
+    mem_mb: 38400
+### PCA
+  vcf2plink_pca:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### runs of homozygosity
+  filter_vcf_hwe:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  vcf2plink_hwe:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### snpEff
+  build_snpEff_db:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  annotate_vcf:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+### gerp
+  outgroups2fastq:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  outgroup_fastqc:
+    cpus_per_task: 2
+    runtime: 120
+    mem_mb: 12800
+  align2target:
+    cpus_per_task: 8
+    runtime: 1440
+    mem_mb: 51200
+  bam2fasta:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  split_ref_contigs:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  concatenate_fasta_per_contig:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  compute_gerp:
+    cpus_per_task: 4
+    runtime: 720
+    mem_mb: 25600
+  gerp2coords:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  get_ancestral_state:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  produce_contig_out:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merge_gerp_per_chunk:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  merge_gerp_gz:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
+  split_vcf_files:
+    cpus_per_task: 2
+    runtime: 300
+    mem_mb: 12800
+  gerp_derived_alleles:
+    cpus_per_task: 2
+    runtime: 2880
+    mem_mb: 12800
+  merge_gerp_alleles_per_chunk:
+    cpus_per_task: 4
+    runtime: 720
+    mem_mb: 25600
+  merge_gerp_alleles_gz:
+    cpus_per_task: 4
+    runtime: 720
+    mem_mb: 25600
+  relative_mutational_load_per_sample:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 12800
