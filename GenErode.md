@@ -26,6 +26,9 @@ scp slurm/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzic
 
 scp config_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/config/config.yaml
 scp slurm_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/slurm/config.yaml
+
+scp config_herring3/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring3/GenErode/config/config.yaml
+scp slurm_herring3/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring3/GenErode/slurm/config.yaml
 ```
 
 ## Samples MetaData files
@@ -44,8 +47,18 @@ echo "samplename_index_lane readgroup_id readgroup_platform path_to_R1_fastq_fil
 # you need pandas - my base env on dardel has it installed
 conda activate
 pmff=/cfs/klemming/home/e/ebazzica/scripts/print_metadata_from_folder.py
+
 python ${pmff} --idir /cfs/klemming/projects/supr/naiss2024-6-170/raw_data/Herring_DeepSeq_2/files/P36109 \
     >> historical_samples_paths.txt
+
+python ${pmff} --idir /cfs/klemming/projects/supr/naiss2024-6-170/raw_data/Herring_DeepSeq_3/files/P37012 \
+    >> historical_samples_paths.txt
+
+# I did:
+# grep -vE "ND157|ND158|ND164|ND165|ND169|ND184|ND319|ND325|ND463" historical_samples_paths.txt > tmp && mv tmp historical_samples_paths.txt
+# because those samples were mapped already when Herring_DeepSeq_2 arrived and didn't receive any
+# additional sequencing in Herring_DeepSeq_3
+# If starting from scratch it's not needed.
 ```
 
 ## Run alignments
