@@ -33,6 +33,9 @@ for n in range(1, 501):
     af["Total_AF"] = af.iloc[:, 2:].mean(axis=1, skipna=True)
     af = af[(af["Total_AF"] >= 0.05) & (af["Total_AF"] <= 0.95)]
     af.reset_index(drop=True, inplace=True)
+    # filter rows with more than 20% NA values
+    af = af[af.iloc[:, 2:-1].isna().mean(axis=1) <= 0.2]  # exclude CHROM, POS and Total_AF columns
+    af.reset_index(drop=True, inplace=True)
     # number of snps after filtering maf
     filtered_snps = af.shape[0]
     # create ac dataframe
@@ -48,7 +51,7 @@ for n in range(1, 501):
         ac[f'{col}_ref'] = sample_size_value - ac[f'{col}_alt']
     
     # OPTION 1 - set missing data to 0
-    nona_snps = ac.dropna().shape[0]
+    #nona_snps = ac.dropna().shape[0]
     ac = ac.fillna(0)
     
     # OPTION 2 - remove missing data rows
@@ -60,7 +63,7 @@ for n in range(1, 501):
     # save ac file - without index and header (only data)
     out_file = f"data/selection_scans_poolseq/subsets_acs/60.Neff.{nn}.ac"
     ac.to_csv(out_file, sep="\t", index=False, header=False)
-    print(f'Saved {out_file} with shape {ac.shape} from {initial_snps} SNPs before MAF and {nona_snps} SNPs with no NA values')
+    print(f'Saved {out_file} with shape {ac.shape} from {initial_snps} SNPs before MAF and missing data filtering')
     # save snp positions file
     snp_pos = af[['CHROM', 'POS']].iloc[ac.index]
     snp_pos_file = f"data/selection_scans_poolseq/subsets_acs/60.Neff.{nn}.snps"

@@ -75,3 +75,9 @@ write.table(etable[1, ], file = "data/selection_scans_poolseq/sst_mean.txt",
             col.names = FALSE, row.names = FALSE, sep = " ")
 write.table(etable[2, ], file = "data/selection_scans_poolseq/sss_mean.txt",
             col.names = FALSE, row.names = FALSE, sep = " ")
+
+# save tables with column names)
+write.table(etable[1, ], file = "data/selection_scans_poolseq/sst_mean.colnames.txt",
+            row.names = FALSE, sep = " ")
+write.table(etable[2, ], file = "data/selection_scans_poolseq/sss_mean.colnames.txt",
+            row.names = FALSE, sep = " ")
