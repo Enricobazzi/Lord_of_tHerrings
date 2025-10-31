@@ -41,7 +41,7 @@ unwanted <- c("HWS1_Japan_SeaOfJapan",
 #### LOAD DATA ####
 
 
-# freq: genetic data - use 001 subset for now
+# geno: genetic data - use 001 subset for now
 freq <- read.table("data/selection_scans_poolseq/subsets_freqs/60.Neff.001.freq")[, -(1:2)]
 colnames(freq) <- strsplit(readLines("data/published_data/60.Neff.freq", n = 1), "\t")[[1]][-c(1:2)]
 freq <- freq[ , (!names(freq) %in% unwanted)]
