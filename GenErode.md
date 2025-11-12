@@ -97,3 +97,26 @@ conda activate generode
 snakemake --profile slurm -n &> <YYMMDD>_dry.out
 snakemake --profile slurm &> <YYMMDD>_main.out
 ```
+
+## Alignment QC
+
+### Depth
+
+After obtaining bam files run the [depth_from_bam.sh](src/mapping/depth_from_bam.sh) to extract alignment depth from the bam:
+```
+for bam in $(ls /cfs/klemming/projects/supr/naiss2024-6-170/analyses/Herring/data/bams/*.bam); do
+  sbatch src/mapping/depth_from_bam.sh ${bam}
+done
+
+# Use this dirty script to get each sample's mean:
+grep "#" /cfs/klemming/projects/supr/naiss2024-6-170/analyses/Herring/data/bams/*.depth | \
+    rev | cut -d'/' -f1 | rev | sed 's/.depth:# mean=/ /' | cut -d' ' -f1,2
+```
+
+After adding depth to the wg_depth column of [samples_table.csv](data/samples_table.csv), plot the mean depth of each sample in a list:
+```
+# for ND samples:
+python src/mapping/plot_depth.py \
+    --sfile <(grep "ND" data/samples_table.csv | cut -d',' -f1) \
+    --ofile plots/mapping/mean_depth_ND_samples.png
+```
