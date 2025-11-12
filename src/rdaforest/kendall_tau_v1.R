@@ -1,4 +1,7 @@
 library(tidyverse)
+library(adegenet)
+library(vegan)
+library(ggrepel)
 
 cor_test_wrapper <- function(p_vec, env_vector){
   correlation_result <- cor.test(p_vec, env_vector, method = "kendall", exact = F)
@@ -26,7 +29,7 @@ rownames(env) <- samples
 aaa <- data.frame()
 for (i in 1:ncol(gt_data)){
   print(i)
-  a <- cor_test_wrapper(gt_data[, i], env$sss_mean)
+  a <- cor_test_wrapper(gt_data[, i], env$sst_mean)
   aaa <- rbind(aaa, a)
 }
 
@@ -36,6 +39,7 @@ pos <- sapply(strsplit(colnames(gt_data), ":"), function(y) as.numeric(strsplit(
 zzz <- data.frame(
   CHROM = chrom,
   POS = pos,
+  SNP = colnames(gt_data),
   kend = aaa[, 1],
   pval = aaa[, 2]
 )
@@ -48,6 +52,11 @@ for (chr in unique(chrom)){
   }
 }
 
+candtau <- zzz %>%
+  filter(
+    pval < quantile(zzz$pval, 0.01, na.rm = TRUE)
+  )
+
 # TRY SUBSETTING TO INVERSION
 gt_df <- as.data.frame(t(gt_data))
 gt_df$CHR <- as.character(chrom)
@@ -58,7 +67,45 @@ bb <- gt_df %>%
     POS > 22500000,
     POS < 25200000
   )
+bb <- gt_df[candtau$SNP, ]
+plot(hclust(dist(t(bb[, samples]))))
 
 PCA <- rda(t(bb[, samples]), scale=T)
-plot(hclust(dist(t(bb[, samples]))))
-geno <- t(bb[, samples])
+sample_df <- data.frame(scores(PCA, choices=c(1:4), display="sites", scaling="none"))
+sample_df$population <- column_to_rownames(data_table  %>% `rownames<-`( NULL ), var = "sample_id")[rownames(sample_df), "region"]
+col <- rep(NA, length(rownames(sample_df)))
+col[grep("BALTIC", sample_df$population)] <- "#E31A1C"
+col[grep("NE-ATL", sample_df$population)] <- "#3B528BFF"
+col[grep("TRANS", sample_df$population)] <- "#A035AF"
+sample_df$color <- col
+sample_labels <- rownames(sample_df)
+rda_ax_expl_constrain = round(x = (PCA$CA$eig / sum(PCA$CA$eig)) * 100,
+                              digits = 2)
+sample_df$sst <- env$sst_mean
+sample_df$sss <- env$sss_mean
+
+scale <- 3 + (log(sample_df$sst) - min(log(sample_df$sst))) * (8 - 3) / (max(log(sample_df$sst)) - min(log(sample_df$sst)))
+scale <- 3 + (sample_df$sst - min(sample_df$sst)) * (8 - 3) / (max(sample_df$sst) - min(sample_df$sst))
+
+# plot!
+x = 1
+y = 2
+pca_plot <- ggplot() +
+  geom_hline(yintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
+  geom_vline(xintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
+  geom_point(aes(x = sample_df[,x], y = sample_df[,y], fill = sample_df[, "sss"]),
+             shape = 21, cex = 3, alpha = 0.8) +
+  geom_text_repel(aes(x = sample_df[, x],
+                      y = sample_df[, y],
+                      label = sample_labels),
+                  family = "Verdana",
+                  size = 2,
+                  box.padding = 0.3,
+                  point.padding = 0.2,
+                  max.overlaps = Inf) +
+  theme_bw(base_size = 14, base_family = "Verdana") +
+  scale_fill_viridis() +
+  theme(panel.grid = element_blank()) +
+  xlab(paste0(colnames(sample_df)[x], " - ", rda_ax_expl_constrain[x], "%")) +
+  ylab(paste0(colnames(sample_df)[y], " - ", rda_ax_expl_constrain[y], "%"))
+pca_plot
