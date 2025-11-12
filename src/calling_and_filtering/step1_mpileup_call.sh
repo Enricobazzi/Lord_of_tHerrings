@@ -1,9 +1,9 @@
 #!/bin/bash -l
-#SBATCH -A naiss2025-22-1002
+#SBATCH -A naiss2025-5-565
 #SBATCH -p shared
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
-#SBATCH -t 1-12:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH --mem=24G
 
 module load bcftools
