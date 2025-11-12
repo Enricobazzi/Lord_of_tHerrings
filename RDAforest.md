@@ -64,6 +64,10 @@ done
 
 ## obtain dataset - distance from bam files:
 
+see:
+https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giaf032/8106438
+https://github.com/gkanogiannis/fastreeR
+
 ### distAngsd
 from the 209 modern samples + 124 our historical + 73 atmore historical = total of 406 individuals:
 that makes 82215 pairs! see if feasible to calculate pairwise like this or there is more efficient way?
