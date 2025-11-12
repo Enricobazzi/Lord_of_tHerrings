@@ -211,7 +211,7 @@ for (i in 1:length(rownames(geno))){
 #### HABITAT SUITABILITY WITH IND DATA ####
 
 # read individual genetic data
-sample <- "ND009"
+sample <- "ND157"
 hist.samples <- c("HER001", "HER002", "HER003", "HER004", "HER005", "HER006", "HER007", "HER008", "HER009", "HER012", "HER013", "HER015", "HER016", "HER018", "HER035", "HER036", "HER037", "HER038", "HER039", "HER041", "HER042", "HER043", "HER045", "HER046", "HER047", "HER051", "HER056", "HER059", "HER065", "HER067", "HER069", "HER102", "HER104", "HER106", "HER109", "HER110", "HER111", "HER112", "HER113", "HER114", "HER115", "HER116", "HER117", "HER118", "HER121", "HER123", "HER124", "HER127", "HER128", "HER130", "HER132", "HER133", "HER134", "HER135", "HER136", "ND001", "ND009", "ND010", "ND011", "ND021", "ND022", "ND023", "ND024", "ND026", "ND028", "ND029", "ND030", "ND031", "ND032", "ND034", "ND036", "ND038", "ND039", "ND040", "ND157")
 
 for (sample in hist.samples){
@@ -220,6 +220,7 @@ for (sample in hist.samples){
   ind.data <- as.matrix(ind.data)
   colnames(ind.data) <- sub("_[A-Za-z0-9]+$", "", colnames(ind.data))
   # geno.i <- ind.data[, intersect(colnames(ind.data), sub("_[A-Za-z0-9]+$", "", cand_snps$snp)), drop = FALSE]
+  # geno.i <- ind.data[, intersect(colnames(ind.data), sub("_[A-Za-z0-9]+$", "", candtau$SNP)), drop = FALSE]
   geno.i <- ind.data
   
   if (ncol(geno.i) < 100){
@@ -292,8 +293,8 @@ for (sample in hist.samples){
   x = 1
   y = 2
   rda_plot <- ggplot() +
-    geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.3) +
-    geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.3) +
+    geom_hline(yintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
+    geom_vline(xintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
     geom_point(aes(x = sample_df[,x], y = sample_df[,y]),
                shape = 21, cex = 3, fill = sample_df$color, alpha = 0.8) +
     geom_text_repel(aes(x = sample_df[, x],
@@ -325,7 +326,7 @@ for (sample in hist.samples){
 # geno0 <- geno0[, colnames(geno.i)]
 # cordist.i=1-cor(t(rbind(geno0,geno.i)))
 # hc <- hclust(as.dist(cordist.i), method = "average")
-# plot(hc)
+# plot(hclust(as.dist(cordist.i), method = "average"))
 
 
 ####
@@ -340,6 +341,7 @@ plot(hc)
 dev.off()
 
 # geno0 <- geno[, cand_snps$snp]
+# geno0 <- geno[, candtau$SNP]
 geno0 <- geno
 colnames(geno0) <- sub("_[A-Za-z0-9]+$", "", colnames(geno0))
 
