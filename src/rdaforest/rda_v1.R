@@ -36,7 +36,7 @@ rda <- rda(geno ~ ., data=etable, scale=TRUE)
 load.rda <- scores(rda, choices=c(1, 2), display="species")
 cand <- data.frame()
 for(i in 1:2){
-  candN <- outliers(load.rda[,i],3)
+  candN <- outliers(load.rda[,i],2)
   candN <- cbind.data.frame(rep(i,times=length(candN)), names(candN), unname(candN))
   colnames(candN) <- c("axis","snp","loading")
   cand <- rbind(cand, candN)
@@ -83,6 +83,28 @@ col[grep("TRANS", sample_df$population)] <- "#A035AF"
 sample_df$color <- col
 # labels
 sample_labels <- rownames(sample_df)
+# snps portion:
+snps_df <- data.frame(scores(rda, choices=c(1:2), display="species", scaling="none"))
+snps_df$names <- row.names(snps_df)
+snps_df$type <- "Neutral"
+snps_df$type[snps_df$names %in% cand$snp] <- "Candidate"
+col.pred <- c()
+for (n in 1:nrow(snps_df)){
+  row <- snps_df[n,]
+  if (row$type == "Candidate"){
+    if (cand[cand$snp == row$names, "predictor"] == "sst_mean"){
+      col.pred <- append(col.pred, "yellow")
+    } else {
+      col.pred <- append(col.pred, "green")
+    }
+  } else {
+    col.pred <- append(col.pred, "#f1eef6")
+  }
+}
+snps_df$color <- col.pred
+# divide SNPs into 2 data.frames
+neutral_snps_df <- snps_df %>% filter(type == "Neutral")
+candidate_snps_df <- snps_df %>% filter(type == "Candidate")
 # variance explained by rda axes
 TAB_var <- data.frame(scores(rda, choices=c(1:2), display="bp"))
 rda_ax_expl_constrain = round(x = (rda$CCA$eig / sum(rda$CCA$eig)) * 100,
@@ -93,12 +115,16 @@ y = 2
 rda_plot <- ggplot() +
   geom_hline(yintercept=0, linetype="dashed", color = gray(.80), size=0.3) +
   geom_vline(xintercept=0, linetype="dashed", color = gray(.80), size=0.3) +
+  geom_point(aes(x = neutral_snps_df[,x] * 3, y = neutral_snps_df[,y] * 3),
+             shape = 4, cex = 1, fill = neutral_snps_df$color, alpha = 0.5) +
   geom_segment(aes(xend=TAB_var[,x]/2, yend=TAB_var[,y]/2, x=0, y=0),
                colour="black", size=0.15, linetype=1,
                arrow=ggplot2::arrow(length = unit(0.01, "npc"))) +
   geom_text(aes(x=1.05*(TAB_var[,x]/2), y=1.05*(TAB_var[,y]/2),
                 label = as.vector(row.names(TAB_var))),
             size = 3, family = "Verdana") +
+  geom_point(aes(x = candidate_snps_df[,x] * 3, y = candidate_snps_df[,y] * 3),
+             shape = 21, cex = 1.5, fill = candidate_snps_df$color, alpha = 0.8) +
   geom_point(aes(x = sample_df[,x], y = sample_df[,y]),
              shape = 21, cex = 3, fill = sample_df$color, alpha = 0.8) +
   geom_text_repel(aes(x = sample_df[, x],
@@ -136,6 +162,11 @@ sample_labels <- rownames(sample_df)
 # variance explained by rda axes
 rda_ax_expl_constrain = round(x = (PCA$CA$eig / sum(PCA$CA$eig)) * 100,
                               digits = 2)
+
+scale <- 3 + (log(etable$sst_mean) - min(log(etable$sst_mean))) * (8 - 3) / (max(log(etable$sst_mean)) - min(log(etable$sst_mean)))
+scale <- 3 + (etable$sst_mean - min(etable$sst_mean)) * (8 - 3) / (max(etable$sst_mean) - min(etable$sst_mean))
+scale <- 3 + (etable$sss_mean - min(etable$sss_mean)) * (8 - 3) / (max(etable$sss_mean) - min(etable$sss_mean))
+
 # plot!
 x = 1
 y = 2
@@ -143,7 +174,7 @@ pca_plot <- ggplot() +
   geom_hline(yintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
   geom_vline(xintercept=0, linetype="dashed", color = gray(.80), linewidth=0.3) +
   geom_point(aes(x = sample_df[,x], y = sample_df[,y]),
-             shape = 21, cex = 3, fill = sample_df$color, alpha = 0.8) +
+             shape = 21, cex = scale, fill = sample_df$color, alpha = 0.8) +
   geom_text_repel(aes(x = sample_df[, x],
                       y = sample_df[, y],
                       label = sample_labels),
