@@ -10,8 +10,8 @@ plot_map <- function(world_map_sp){
   wm <- ggplot() +
     geom_sf(data = world_map_sf, fill = "grey80", color = "grey0") +
     coord_sf(
-      xlim = c(-30, 30),
-      ylim = c(47.5, 70),
+      xlim = c(-80, 30),
+      ylim = c(40, 75),
       expand = FALSE,
       default_crs = st_crs(world_map_sf)
     )
@@ -33,12 +33,12 @@ modern <- tab %>%
   )
 
 modern_summary <- modern %>%
-  count(x, y, region)
+  count(x, y, spawn)
 
 plot_map(world_map_sp) +
   geom_point(
     data = modern_summary,
-    aes(x = x, y = y, fill = region, size = n), 
+    aes(x = x, y = y, fill = spawn, size = n), 
     shape = 21) +
   geom_label_repel(
     data = modern_summary,
