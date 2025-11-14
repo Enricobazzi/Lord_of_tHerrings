@@ -23,6 +23,7 @@ I have replicated these here locally to easily modify them, but they should be l
 ```
 scp data/generode/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring1/GenErode/config/config.yaml
 scp data/generode/slurm_config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring1/GenErode/slurm/config.yaml
+scp data/generode/*_samples_paths.txt ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring1/GenErode/config/
 ```
 
 ## Samples MetaData files
