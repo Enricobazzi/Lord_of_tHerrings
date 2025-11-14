@@ -20,7 +20,7 @@
 # headers without special characters and has to be uncompressed. 
 # The file name will be reused by the pipeline and can have the file 
 # name extensions *.fasta, *.fa or *.fna.
-ref_path: "/cfs/klemming/projects/supr/naiss2024-6-170/analyses/Generode_Herring/Reference/GCA_040183275.1_Ch_v3.0_genomic.fna"
+ref_path: "/cfs/klemming/projects/supr/naiss2024-6-170/analyses/Reference/GCF_900700415.2_Ch_v2.0.2_genomic.fna"
 
 
 # OPTIONAL:
@@ -45,7 +45,7 @@ sexchromosomes: "" # for example, "config/chrX_candidate_scaffolds.txt"
 # files with sample information.
 # Example files can be found in "config/"
 historical_samples: "config/historical_samples_paths.txt" # leave empty ("") if not run for historical samples.
-modern_samples: "" # leave empty ("") if not run for modern samples. 
+modern_samples: "config/modern_samples_paths.txt" # leave empty ("") if not run for modern samples. 
 #################################################################
 #################################################################
 
@@ -189,7 +189,7 @@ historical_bam_mapDamage: True
 # List has to be left empty ([]) if mapDamage2 is not run.
 # Keep the list of sample names for the entire pipeline run 
 # if rescaled BAM files should be used in downstream analyses.
-historical_rescaled_samplenames: ["ND142", "ND157", "ND158", "ND161", "ND163", "ND164", "ND165", "ND166", "ND167", "ND168", "ND169", "ND170", "ND171", "ND178", "ND180", "ND182", "ND183", "ND184", "ND187", "ND188", "ND195", "ND196", "ND197", "ND198", "ND199", "ND200", "ND201", "ND202", "ND203", "ND204", "ND205", "ND206", "ND302", "ND304", "ND305", "ND306", "ND307", "ND308", "ND309", "ND311", "ND312", "ND313", "ND314", "ND315", "ND316", "ND317", "ND319", "ND320", "ND321", "ND322", "ND323", "ND324", "ND325", "ND326", "ND328", "ND329", "ND330", "ND331", "ND332", "ND333", "ND334", "ND335", "ND336", "ND337", "ND342", "ND343", "ND391", "ND392", "ND393", "ND394", "ND395", "ND396", "ND397", "ND398", "ND399", "ND400", "ND401", "ND402", "ND403", "ND404", "ND405", "ND407", "ND408", "ND409", "ND410", "ND411", "ND414", "ND415", "ND417", "ND418", "ND440", "ND443", "ND448", "ND450", "ND454", "ND455", "ND456", "ND459", "ND460", "ND461", "ND463", "ND464", "ND467"]
+historical_rescaled_samplenames: ["HER001", "HER002", "HER003", "HER004", "HER005", "HER006", "HER007", "HER008", "HER009", "HER012", "HER013", "HER014", "HER015", "HER016", "HER017", "HER018", "HER019", "HER020", "HER021", "HER022", "HER023", "HER035", "HER036", "HER037", "HER038", "HER039", "HER040", "HER041", "HER042", "HER043", "HER044", "HER045", "HER046", "HER047", "HER048", "HER050", "HER051", "HER052", "HER054", "HER055", "HER056", "HER057", "HER059", "HER064", "HER065", "HER067", "HER069", "HER088", "HER102", "HER104", "HER105", "HER106", "HER109", "HER110", "HER111", "HER112", "HER113", "HER114", "HER115", "HER116", "HER117", "HER118", "HER121", "HER123", "HER124", "HER127", "HER128", "HER130", "HER132", "HER133", "HER134", "HER135", "HER136", "ND001", "ND006", "ND009", "ND010", "ND011", "ND021", "ND022", "ND023", "ND024", "ND026", "ND028", "ND029", "ND030", "ND031", "ND032", "ND034", "ND036", "ND038", "ND039", "ND040", "ND142", "ND157", "ND158", "ND161", "ND163", "ND164", "ND165", "ND166", "ND167", "ND168", "ND169", "ND170", "ND171", "ND178", "ND180", "ND182", "ND183", "ND184", "ND187", "ND188", "ND195", "ND196", "ND197", "ND198", "ND199", "ND200", "ND201", "ND202", "ND203", "ND204", "ND205", "ND206", "ND302", "ND304", "ND305", "ND306", "ND307", "ND308", "ND309", "ND311", "ND312", "ND313", "ND314", "ND315", "ND316", "ND317", "ND319", "ND320", "ND321", "ND322", "ND323", "ND324", "ND325", "ND326", "ND328", "ND329", "ND330", "ND331", "ND332", "ND333", "ND334", "ND335", "ND336", "ND337", "ND342", "ND343", "ND364", "ND365", "ND374", "ND375", "ND387", "ND391", "ND392", "ND393", "ND394", "ND395", "ND396", "ND397", "ND398", "ND399", "ND400", "ND401", "ND402", "ND403", "ND404", "ND405", "ND407", "ND408", "ND409", "ND410", "ND411", "ND414", "ND415", "ND417", "ND418", "ND440", "ND443", "ND448", "ND450", "ND454", "ND455", "ND456", "ND459", "ND460", "ND461", "ND463", "ND464", "ND467"]
 #####
 
 
@@ -247,7 +247,7 @@ genotyping: False
 # below to True and specify samples in the list below in 
 # which CpG sites should be identified and/or from which 
 # CpG sites should be removed.
-CpG_identification: False
+CpG_identification: True
 
 # Method 1: 
 # Identify CpG sites in single-individual VCF files of samples 
@@ -266,7 +266,7 @@ CpG_from_vcf: False
 # Has to be kept at True for the rest of the pipeline, if chosen 
 # method for CpG identification, so that the correct files are 
 # used for downstream analyses.
-CpG_from_reference: False
+CpG_from_reference: True
 
 # Method 3: 
 # Identify CpG sites in single-individual VCF files and in the 
@@ -288,7 +288,7 @@ CpG_from_vcf_and_reference: False
 # CpG site filtering is run.
 # Keep the list of sample names for the entire pipeline run 
 # so that the correct files are used for downstream analyses.
-CpG_samplenames: ["ND142", "ND157", "ND158", "ND161", "ND163", "ND164", "ND165", "ND166", "ND167", "ND168", "ND169", "ND170", "ND171", "ND178", "ND180", "ND182", "ND183", "ND184", "ND187", "ND188", "ND195", "ND196", "ND197", "ND198", "ND199", "ND200", "ND201", "ND202", "ND203", "ND204", "ND205", "ND206", "ND302", "ND304", "ND305", "ND306", "ND307", "ND308", "ND309", "ND311", "ND312", "ND313", "ND314", "ND315", "ND316", "ND317", "ND319", "ND320", "ND321", "ND322", "ND323", "ND324", "ND325", "ND326", "ND328", "ND329", "ND330", "ND331", "ND332", "ND333", "ND334", "ND335", "ND336", "ND337", "ND342", "ND343", "ND391", "ND392", "ND393", "ND394", "ND395", "ND396", "ND397", "ND398", "ND399", "ND400", "ND401", "ND402", "ND403", "ND404", "ND405", "ND407", "ND408", "ND409", "ND410", "ND411", "ND414", "ND415", "ND417", "ND418", "ND440", "ND443", "ND448", "ND450", "ND454", "ND455", "ND456", "ND459", "ND460", "ND461", "ND463", "ND464", "ND467"]
+CpG_samplenames: ["HER001", "HER002", "HER003", "HER004", "HER005", "HER006", "HER007", "HER008", "HER009", "HER012", "HER013", "HER014", "HER015", "HER016", "HER017", "HER018", "HER019", "HER020", "HER021", "HER022", "HER023", "HER035", "HER036", "HER037", "HER038", "HER039", "HER040", "HER041", "HER042", "HER043", "HER044", "HER045", "HER046", "HER047", "HER048", "HER050", "HER051", "HER052", "HER054", "HER055", "HER056", "HER057", "HER059", "HER064", "HER065", "HER067", "HER069", "HER088", "HER102", "HER104", "HER105", "HER106", "HER109", "HER110", "HER111", "HER112", "HER113", "HER114", "HER115", "HER116", "HER117", "HER118", "HER121", "HER123", "HER124", "HER127", "HER128", "HER130", "HER132", "HER133", "HER134", "HER135", "HER136", "ND001", "ND006", "ND009", "ND010", "ND011", "ND021", "ND022", "ND023", "ND024", "ND026", "ND028", "ND029", "ND030", "ND031", "ND032", "ND034", "ND036", "ND038", "ND039", "ND040", "ND142", "ND157", "ND158", "ND161", "ND163", "ND164", "ND165", "ND166", "ND167", "ND168", "ND169", "ND170", "ND171", "ND178", "ND180", "ND182", "ND183", "ND184", "ND187", "ND188", "ND195", "ND196", "ND197", "ND198", "ND199", "ND200", "ND201", "ND202", "ND203", "ND204", "ND205", "ND206", "ND302", "ND304", "ND305", "ND306", "ND307", "ND308", "ND309", "ND311", "ND312", "ND313", "ND314", "ND315", "ND316", "ND317", "ND319", "ND320", "ND321", "ND322", "ND323", "ND324", "ND325", "ND326", "ND328", "ND329", "ND330", "ND331", "ND332", "ND333", "ND334", "ND335", "ND336", "ND337", "ND342", "ND343", "ND364", "ND365", "ND374", "ND375", "ND387", "ND391", "ND392", "ND393", "ND394", "ND395", "ND396", "ND397", "ND398", "ND399", "ND400", "ND401", "ND402", "ND403", "ND404", "ND405", "ND407", "ND408", "ND409", "ND410", "ND411", "ND414", "ND415", "ND417", "ND418", "ND440", "ND443", "ND448", "ND450", "ND454", "ND455", "ND456", "ND459", "ND460", "ND461", "ND463", "ND464", "ND467"]
 #####
 
 

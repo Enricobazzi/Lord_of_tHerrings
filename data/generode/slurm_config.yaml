@@ -1,7 +1,7 @@
 # Configuration file for slurm plugin (Snakemake >8.0.0) for Dardel cluster at PDC/KTH
 # snakemake CLI flags
 executor: slurm
-jobs: 200
+jobs: 300
 printshellcmds: true
 software-deployment-method: apptainer
 use-apptainer: True
@@ -10,7 +10,7 @@ apptainer-args: "-B /cfs/klemming"
 # slurm resources
 ## default-resources: applied to all jobs, overruled by resources defined below for jobs
 default-resources: 
-  slurm_account: naiss2024-5-520 # update this to your slurm account
+  slurm_account: naiss2025-5-565 # update this to your slurm account
   slurm_partition: shared # use Dardel’s shared partition
   nodes: 1 # one node on Dardel from the shared partition
   ntasks: 1 # number of concurrent tasks / ranks
@@ -50,6 +50,7 @@ set-threads:
   - indel_realigner=8
   - realigned_bam_qualimap=8
   - realigned_bam_group=2
+  - realigned_bam_depth=2
 ### rescale bam files
   - rescale_historical=4
   - rescaled_bam_qualimap=8
@@ -242,10 +243,14 @@ set-resources:
     cpus_per_task: 2
     runtime: 720
     mem_mb: 12800
+  realigned_bam_depth:
+    cpus_per_task: 2
+    runtime: 720
+    mem_mb: 24000
 ### rescale bam files
   rescale_historical:
     cpus_per_task: 4
-    runtime: 1440
+    runtime: 7200
     mem_mb: 25600
   rescaled_bam_qualimap:
     cpus_per_task: 8

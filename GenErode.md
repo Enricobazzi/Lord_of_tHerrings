@@ -21,14 +21,8 @@ Both of these were copied and modified from the [template slurm file](https://gi
 
 I have replicated these here locally to easily modify them, but they should be located in the GenErode folder where the analysis is run on the cluster. To copy them:
 ```
-scp config/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/GenErode/config/config.yaml
-scp slurm/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/GenErode/slurm/config.yaml
-
-scp config_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/config/config.yaml
-scp slurm_herring2/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring2/GenErode/slurm/config.yaml
-
-scp config_herring3/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring3/GenErode/config/config.yaml
-scp slurm_herring3/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring3/GenErode/slurm/config.yaml
+scp data/generode/config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring1/GenErode/config/config.yaml
+scp data/generode/slurm_config.yaml ebazzica@dardel.pdc.kth.se:/cfs/klemming/scratch/e/ebazzica/Herring1/GenErode/slurm/config.yaml
 ```
 
 ## Samples MetaData files
