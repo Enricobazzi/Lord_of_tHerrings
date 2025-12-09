@@ -8,6 +8,7 @@
 
 pop=${1}
 i=${2}
+g=${3}
 
 if [ ! -f data/GONE2/${pop}.lowmiss_snps.ped ]; then
     echo "Input PED file data/GONE2/${pop}.lowmiss_snps.ped not found!"
@@ -16,7 +17,7 @@ fi
 
 src/GONE2/GONE2-1.0.2/gone2 \
     -t 3 \
-    -g 3 \
+    -g ${g} \
     -r 2.54 \
     -s 150000 \
     -o data/GONE2/output/${pop}.${i} \

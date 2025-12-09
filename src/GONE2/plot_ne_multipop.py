@@ -11,8 +11,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Configuration
-POPULATIONS = ['maseskar_2003', 'dynekilen_1874', 'masthugget_1740', 'kampinge_1300', 'knastorp_600']
-POPULATIONS = ['maseskar_2003', 'dynekilen_1874', 'masthugget_1740']
+POPULATIONS = ['faroe_2016', 'outeridefjord_2010', 'idefjord_2010', 'northsea_2016', 'norwegiansea_2015', 'maseskar_2003', 'dynekilen_1874', 'masthugget_1740', 'foldfjorden_1875', 'stavanger_1880']
+POPULATIONS = ['outeridefjord_2010', 'maseskar_2003', 'risor_2008', 'dynekilen_1874', 'masthugget_1740', 'foldfjorden_1875', 'stavanger_1880']
+POPULATIONS = ['faroe_2016', 'norwegiansea_2015', 'northsea_2016', 'maseskar_2003', 'dynekilen_1874', 'masthugget_1740', 'foldfjorden_1875', 'stavanger_1880']
 GENERATION_TIME: float = 4  # Generation time in years
 SILL_PERIODS = [(1556, 1589), (1650, 1680), (1747, 1809), (1877, 1906)]
 OUTPUT_FILE = f"plots/GONE2/{'.'.join(POPULATIONS)}.ne.png"
@@ -22,7 +23,15 @@ COLOR_MAP = {
     'dynekilen_1874': 'C1',
     'masthugget_1740': 'C2',
     'kampinge_1300': 'C3',
-    'knastorp_600': 'C4'
+    'knastorp_600': 'C4',
+    'foldfjorden_1875': 'C3',
+    'stavanger_1880': 'C4',
+    'risor_2008': 'C5',
+    'northsea_2016': 'C6',
+    'norwegiansea_2015': 'C7',
+    'faroe_2016': 'C8',
+    'outeridefjord_2010': 'C9',
+    'idefjord_2010': 'C10'
 }   
 
 # Initialize plot
@@ -36,8 +45,8 @@ for population in POPULATIONS:
     for iteration in range(1, 51):
         ne_file = f"data/GONE2/output/{population}.{iteration}_GONE2_Ne"
         ne_data = pd.read_csv(ne_file, sep="\t")
-        # Remove first 10 generations to avoid artifacts
-        ne_data = ne_data[ne_data['Generation'] > 10]
+        # Remove first generations to avoid artifacts
+        ne_data = ne_data[ne_data['Generation'] > 4]
         pop_df[iteration] = ne_data
     
     # Combine all iterations and compute median and CI Ne per generation
@@ -73,11 +82,30 @@ plt.title('Effective Population Size (Ne)\n in the last 120 generations')
 # Create legend with sill periods and populations
 import matplotlib.patches as mpatches
 sill_patch = mpatches.Patch(color='gray', alpha=0.3, label='Sillperioder')
-population_patches = [
-    mpatches.Patch(color='C0', label='Maseskar (2003)'),
-    mpatches.Patch(color='C1', label='Dynekilen (1874)'),
-    mpatches.Patch(color='C2', label='Masthugget (1740)')
-]
+population_patches = []
+for population in POPULATIONS:
+    if population == "maseskar_2003":
+        population_patches.append(mpatches.Patch(color='C0', label='Maseskär (2003)'))
+    elif population == "dynekilen_1874":
+        population_patches.append(mpatches.Patch(color='C1', label='Dynekilen (1874)'))
+    elif population == "masthugget_1740":
+        population_patches.append(mpatches.Patch(color='C2', label='Masthugget (1740)'))
+    elif population == "foldfjorden_1875":
+        population_patches.append(mpatches.Patch(color='C3', label='Foldfjorden (1875)'))
+    elif population == "stavanger_1880":
+        population_patches.append(mpatches.Patch(color='C4', label='Stavanger (1880)'))
+    elif population == "risor_2008":
+        population_patches.append(mpatches.Patch(color='C5', label='Risor (2008)'))
+    elif population == "northsea_2016":
+        population_patches.append(mpatches.Patch(color='C6', label='North Sea (2016)'))
+    elif population == "norwegiansea_2015":
+        population_patches.append(mpatches.Patch(color='C7', label='Norwegian Sea (2015)'))
+    elif population == "faroe_2016":
+        population_patches.append(mpatches.Patch(color='C8', label='Faroe (2016)'))
+    elif population == "outeridefjord_2010":
+        population_patches.append(mpatches.Patch(color='C9', label='Outeridefjord (2010)'))
+    elif population == "idefjord_2010":
+        population_patches.append(mpatches.Patch(color='C10', label='Idefjord (2010)'))
 plt.legend(handles=[sill_patch] + population_patches, loc='lower left')
 
 # Save the plot

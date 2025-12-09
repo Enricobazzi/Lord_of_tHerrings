@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Configuration
-POPULATIONS = ['maseskar_2003', 'dynekilen_1874', 'masthugget_1740', 'kampinge_1300', 'knastorp_600']
+POPULATIONS = ['idefjord_2010', 'faroe_2016', 'outeridefjord_2010', 'northsea_2016', 'norwegiansea_2015', 'risor_2008', 'maseskar_2003', 'dynekilen_1874', 'masthugget_1740', 'foldfjorden_1875', 'stavanger_1880']
 GENERATION_TIME: float = 4  # Generation time in years
 SILL_PERIODS = [(1556, 1589), (1650, 1680), (1747, 1809), (1877, 1906)]
 
@@ -21,7 +21,15 @@ COLOR_MAP = {
     'dynekilen_1874': 'C1',
     'masthugget_1740': 'C2',
     'kampinge_1300': 'C3',
-    'knastorp_600': 'C4'
+    'knastorp_600': 'C4',
+    'foldfjorden_1875': 'C3',
+    'stavanger_1880': 'C4',
+    'risor_2008': 'C5',
+    'northsea_2016': 'C6',
+    'norwegiansea_2015': 'C7',
+    'faroe_2016': 'C8',
+    'outeridefjord_2010': 'C9',
+    'idefjord_2010': 'C10'
 }
 
 # Process each population and compute median Ne values across iterations
@@ -36,8 +44,8 @@ for population in POPULATIONS:
     for iteration in range(1, 51):
         ne_file = f"data/GONE2/output/{population}.{iteration}_GONE2_Ne"
         ne_data = pd.read_csv(ne_file, sep="\t")
-        # Remove first 10 generations to avoid artifacts
-        ne_data = ne_data[ne_data['Generation'] > 10]
+        # Remove first generations to avoid artifacts
+        ne_data = ne_data[ne_data['Generation'] > 4]
         pop_df[iteration] = ne_data
         years = year_of_sampling - (ne_data['Generation'] * GENERATION_TIME)
         ne_values = ne_data['Ne_diploids']
@@ -65,8 +73,8 @@ for population in POPULATIONS:
     # Configure plot appearance
     plt.xlabel(f'Year (Generation time = {GENERATION_TIME} years)')
     plt.xticks(np.arange(1300, 2025, 100))
-    plt.ylabel('Median Ne from 50 Iterations')
-    plt.title('Effective Population (Ne) Size over Years')
+    plt.ylabel('Effective Population Size (Ne)')
+    plt.title('')
     
     # Create legend with sill periods and populations
     import matplotlib.patches as mpatches
@@ -81,6 +89,22 @@ for population in POPULATIONS:
         population_patches = [mpatches.Patch(color='C3', label='Kampinge (1300)')]
     elif population == "knastorp_600":
         population_patches = [mpatches.Patch(color='C4', label='Knastorp (600)')]
+    elif population == "foldfjorden_1875":
+        population_patches = [mpatches.Patch(color='C3', label='Foldfjorden (1875)')]
+    elif population == "stavanger_1880":
+        population_patches = [mpatches.Patch(color='C4', label='Stavanger (1880)')]
+    elif population == "risor_2008":
+        population_patches = [mpatches.Patch(color='C5', label='Risor (2008)')]
+    elif population == "northsea_2016":
+        population_patches = [mpatches.Patch(color='C6', label='North Sea (2016)')]
+    elif population == "norwegiansea_2015":
+        population_patches = [mpatches.Patch(color='C7', label='Norwegian Sea (2015)')]
+    elif population == "faroe_2016":
+        population_patches = [mpatches.Patch(color='C8', label='Faroe (2016)')]
+    elif population == "outeridefjord_2010":
+        population_patches = [mpatches.Patch(color='C9', label='Outeridefjord (2010)')]
+    elif population == "idefjord_2010":
+        population_patches = [mpatches.Patch(color='C10', label='Idefjord (2010)')]
     plt.legend(handles=[sill_patch] + population_patches, loc='lower left')
     
     # Save the plot
