@@ -9,7 +9,7 @@
 ## load software
 ml samtools
 
-REPMA='/cfs/klemming/projects/snic/naiss2024-6-170/analyses/Generode_Herring/Reference/GCA_040183275.1_Ch_v3.0_genomic.repma.bed'
+REPMA='/cfs/klemming/projects/snic/naiss2024-6-170/analyses/Reference/GCF_900700415.2_Ch_v2.0.2_genomic.repma.bed'
 ibam=${1}
 bamfolder=$(dirname ${ibam})
 sample=$(basename ${ibam} | cut -d'.' -f1)
