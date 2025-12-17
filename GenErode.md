@@ -99,12 +99,12 @@ snakemake --profile slurm &> <YYMMDD>_main.out
 
 After obtaining bam files run the [depth_from_bam.sh](src/mapping/depth_from_bam.sh) to extract alignment depth from the bam:
 ```
-for bam in $(ls /cfs/klemming/projects/supr/naiss2024-6-170/analyses/Herring/data/bams/*.bam); do
+for bam in $(ls data/bams/*.bam); do
   sbatch src/mapping/depth_from_bam.sh ${bam}
 done
 
 # Use this dirty script to get each sample's mean:
-grep "#" /cfs/klemming/projects/supr/naiss2024-6-170/analyses/Herring/data/bams/*.depth | \
+grep "#" data/bams/*.depth | \
     rev | cut -d'/' -f1 | rev | sed 's/.depth:# mean=/ /' | cut -d' ' -f1,2
 ```
 
@@ -115,3 +115,40 @@ python src/mapping/plot_depth.py \
     --sfile <(grep "ND" data/samples_table.csv | cut -d',' -f1) \
     --ofile plots/mapping/mean_depth_ND_samples.png
 ```
+
+## Subsample bams to 3X
+
+Since there are very low depth samples in our dataset (~1X) I will try to avoid batch effects by subsampling all bams to the same target depth. Bams with lower than than target depth will be copied and given the same name as subsampled bams by the script
+
+```
+target_dp=3
+
+for sample in $(ls data/bams/*.depth | rev | cut -d'/' -f1 | rev | cut -d'.' -f1); do
+    
+    # input bam
+    if [[ -f data/bams/${sample}.merged.rmdup.merged.realn.rescaled.bam ]]; then
+        inbam=data/bams/${sample}.merged.rmdup.merged.realn.rescaled.bam
+    elif [[ -f data/bams/${sample}.merged.rmdup.merged.realn.bam ]]; then
+        inbam=data/bams/${sample}.merged.rmdup.merged.realn.bam
+    else
+        echo "BAM file for sample ${sample} not found!"
+        continue
+    fi
+
+    # output bam
+    outbam=data/bams/${sample}.subsampled_${target_dp}X.bam
+    
+    # fraction of reads to keep
+    sample_dp=$(grep "#" data/bams/${sample}.depth | cut -d'=' -f2 | cut -d' ' -f1)
+    frac=$(awk -v s=${target_dp} -v d=${sample_dp} "BEGIN {{print s/d}}")
+    
+    sbatch \
+        --job-name=${sample}.subsample \
+        --output=logs/mapping/subsample.${sample}.out \
+        --error=logs/mapping/subsample.${sample}.err \
+        src/mapping/subsample_bam.sh \
+        ${inbam} ${outbam} ${frac}
+    
+done
+```
+
