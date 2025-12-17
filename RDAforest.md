@@ -74,10 +74,3 @@ that makes 82215 pairs! see if feasible to calculate pairwise like this or there
 
 see [distAngsd.md](./distAngsd.md)
 
-### Angsd makematrix
-alternative run Angsd command to obtain covariance/ibs matrix (see [here](https://www.popgen.dk/angsd/index.php/PCA_MDS)):
-```
-# example code from Morgan
-inds=68
-angsd -bam ${bams} -rf ${autosomes} -minMapQ 30 -minQ 30 -GL 1 -doMajorMinor 1 -doMaf 1 -SNP_pval 1e-6 -doIBS 1 -doCounts 1 -doCov 1 -minInd ${inds} -makeMatrix 1 -minMaf 0.05 -P 20 -remove_bads 1 -only_proper_pairs 1 -uniqueOnly 1 -skipTriallelic 1 -out ${output}
-```
