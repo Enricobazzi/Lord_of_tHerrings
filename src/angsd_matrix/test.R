@@ -1,58 +1,83 @@
 library(tidyverse)
 library(ggrepel)
 
-samples <- read.table("data/angsd_matrix/bamlists/wp1_subset.sample_list.txt", header = FALSE)$V1
-# remove HER135 from samples
-samples <- samples[samples != "HER135"]
-data_table <- read.table("data/samples_table.csv", sep = ",", header = TRUE, na.strings = "UNKNOWN")
-data_table <- data_table[data_table$sample_id %in% samples, ]
-sample_ids <- data_table$new.id[match(samples, data_table$sample_id)]
 
-## PCA
+get_samples_from_file <- function(file_path) {
+  samples <- read.table(file_path)[, 1] |> as.character()
+  return(samples)
+}
 
-name <- "data/angsd_matrix/output/wp1_subset.filtered.pcangsd.cov"
-m <- as.matrix(read.table(name))
-rownames(m) <- sample_ids
-colnames(m) <- sample_ids
-e <- eigen(m)
-eigenvecs <- as.data.frame(e$vectors)
-rownames(eigenvecs) <- sample_ids
-eigenvecs$sample_id <- sample_ids
-eigenvecs$pop <- str_split(sample_ids, "_", simplify = TRUE)[,1]
-eigenvecs$loc <- ifelse(
-  str_split(sample_ids, "_", simplify = TRUE)[,1] %in% c("iceland", "faroe", "norwegian"),
-  "NE-Atlantic",
-  ifelse(
-    str_split(sample_ids, "_", simplify = TRUE)[,1] %in% c("idefjord", "maseskar", "risor"),
-    "Skagerrak",
-    ifelse(
-      str_split(sample_ids, "_", simplify = TRUE)[,1] %in% c("celtic", "downs", "isleofman", "northsea"),
-      "North Sea",
-      "Other"
-    )
-  )
-)
+get_samples_subset <- function(all_samples_file, subset_samples_file) {
+  all_samples <- get_samples_from_file(all_samples_file)
+  subset_samples <- get_samples_from_file(subset_samples_file)
+  return(all_samples[all_samples %in% subset_samples])
+}
 
-# plot pca color by loc
-ggplot(eigenvecs, aes(x = V1, y = V2, color = loc, label = sample_id)) +
-  geom_point(size = 3) +
-  geom_label_repel(size = 2, max.overlaps = 200, label.size = 0.1, box.padding = 0.1, label.padding = 0.1, force = 20,
-  ) +
-  theme_minimal() +
-  labs(x = paste0("PC1 (", round((e$values[1] / sum(e$values)) * 100, 2), "%)"),
-       y = paste0("PC2 (", round((e$values[2] / sum(e$values)) * 100, 2), "%)"),
-       title = "PCA of samples based on covariance matrix") +
-  scale_color_brewer(palette = "Set1")
+read_matrix_from_file <- function(file_path) {
+  mat <- as.matrix(read.table(file_path))
+  return(mat)
+}
 
+get_samples_matrix <- function(matrix_file, samples, all_samples) {
+  mat <- read_matrix_from_file(matrix_file)
+  if (nrow(mat) == length(samples) && ncol(mat) == length(samples)) {
+    rownames(mat) <- samples
+    colnames(mat) <- samples
+    return(mat)
+  } else {
+    sample_indices <- which(all_samples %in% samples)
+    filtered_mat <- mat[sample_indices, sample_indices]
+    rownames(filtered_mat) <- all_samples[sample_indices]
+    colnames(filtered_mat) <- all_samples[sample_indices]
+    return(filtered_mat)
+  }
+}
 
-#neighbor joining
-cor_mat <- cov2cor(m)
-dist_mat <- as.dist(1 - cor_mat)
-plot(ape::nj(dist_mat), use.edge.length=FALSE)
-plot(hclust(dist(m), "ave"))
+get_sample_metadata <- function(sample_data_file, samples) {
+  sample_data <- read.table(sample_data_file, sep = ",",
+                            header = TRUE, na.strings = "UNKNOWN")
+  sample_data <- sample_data[sample_data$sample_id %in% samples, ]
+  return(sample_data)
+}
 
-# root tree on node including norwegian 2 kalvsund 3 koster 4 koster 3 masthugget 2 norwegian 13 faroe 9 iceland 1 iceland 24 faroe 13 iceland 17 iceland 26 norwegian 28 norwegian 27 masthugget 8 masthugget 3 koster 2 gullholmen 2 masthugget 6 northsea 16 kalvsund 1 gullholmen 5 faroe 3 faroe 6 gullholmen 1 gullholmen 4 gullholmen 3 masthugget 7 masthugget 5 masthugget 4
-tree <- ape::nj(dist_mat)
-plot(tree, "u")
-rooted_tree <- ape::root(tree, outgroup = c("norwegian_2", "kalvsund_3", "koster_4", "koster_3", "masthugget_2", "norwegian_13", "faroe_9", "iceland_1", "iceland_24", "faroe_13", "iceland_17", "iceland_26", "norwegian_28", "norwegian_27", "masthugget_8", "masthugget_3", "koster_2", "gullholmen_2", "masthugget_6", "northsea_16", "kalvsund_1", "gullholmen_5", "faroe_3", "faroe_6", "gullholmen_1", "gullholmen_4", "gullholmen_3", "masthugget_7", "masthugget_5", "masthugget_4"), resolve.root = TRUE)
-plot(rooted_tree, use.edge.length=FALSE)
+get_sample_ids <- function(sample_metadata, samples) {
+  sample_ids <- sample_metadata$new.id[match(samples, sample_metadata$sample_id)]
+  return(sample_ids)
+}
+
+all_samples_name <- "wp1_all"
+subset_samples_name <- "wp1_modern"
+sites_name <- "sf7_sites"
+
+all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
+subset_samples_file <- paste0("data/angsd_matrix/bamlists/", subset_samples_name, ".sample_list.txt")
+# subset_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
+matrix_file <- paste0("data/angsd_matrix/", all_samples_name, ".", sites_name, ".pcangsd.cov")
+sample_data_file <- "data/samples_table.csv"
+
+all_samples <- get_samples_from_file(all_samples_file)
+all_samples <- all_samples[all_samples != "HER135"] # Exclude sample HER135 - should be fixed in the future
+samples <- get_samples_subset(all_samples_file, subset_samples_file)
+samples <- samples[samples != "HER135"] # Exclude sample HER135 - should be fixed in the future
+data_table <- get_sample_metadata(sample_data_file, samples)
+sample_ids <- get_sample_ids(data_table, samples)
+matrix <- get_samples_matrix(matrix_file, samples, all_samples)
+rownames(matrix) <- sample_ids
+colnames(matrix) <- sample_ids
+
+library(adegenet)
+
+grp <- find.clusters(matrix)
+
+candidate_grps <- grp$grp
+
+xval <- xvalDapc(matrix, candidate_grps, n.pca.max = 10,
+                 result = "groupMean",
+                 n.pca = NULL, n.rep = 10, xval.plot = TRUE)
+
+DAPC <- dapc(matrix, candidate_grps,
+             n.pca = xval$DAPC$n.pca,
+             n.da = xval$DAPC$n.da)
+scatter(DAPC)
+dapc_matrix <- data.frame(DAPC$ind.coord)
+dapc_post <- data.frame(DAPC$posterior)

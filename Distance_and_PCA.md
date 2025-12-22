@@ -67,6 +67,21 @@ grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|La
     cut -d',' -f1 >> data/angsd_matrix/bamlists/${dataset}.sample_list.txt
 ```
 
+#### modern samples
+
+```
+dataset=wp1_modern
+
+grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|Lamichh|MartinezBarrio" | \
+    tr ',' ' ' | awk '$6 > 1900' | grep -v "ND" | cut -d' ' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+dataset=wp1_modern_masthugget
+cp data/angsd_matrix/bamlists/wp1_modern.sample_list.txt data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+grep "masthugget" data/samples_table.csv | cut -d',' -f1 >> data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+```
+
 #### create bamlist
 
 create bamlist from sample file:
@@ -160,19 +175,31 @@ angsd -GL 2 -nThreads 1 -doGlf 2 -doMajorMinor 1 -doMaf 2 -SNP_pval 1e-6 \
     -out data/angsd_matrix/gtlike/${dataset}.supplementary_file_7_sites
 ```
 
+get sites with <15% missing data (nInds > 286) and >1% MAF:
+```
+zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | awk '$7 > 286 && $5 > 0.01' | cut -f1,2 > data/angsd_matrix/sites/wp1_all.maf01_miss85.sites
+```
+
 ### run pcangsd
 
 filter the beagle file to only include sites from sites file:
 ```
-zcat data/angsd_matrix/gtlike/wp1_all.beagle.tmp.gz \
+zcat data/angsd_matrix/gtlike/wp1_all.beagle.gz \
 | awk '
 NR==FNR { sites[$1 "_" $2]=1; next }
 NR==1 || ($1 in sites)
 ' data/angsd_matrix/sites/supplementary_file_7.v2.sites - \
-| gzip > data/angsd_matrix/gtlike/wp1_all.filtered.beagle.tmp.gz
+| gzip > data/angsd_matrix/gtlike/wp1_all.sf7_sites.beagle.gz
+
+zcat data/angsd_matrix/gtlike/wp1_all.beagle.gz \
+| awk '
+NR==FNR { sites[$1 "_" $2]=1; next }
+NR==1 || ($1 in sites)
+' data/angsd_matrix/sites/wp1_all.maf01_miss85.sites - \
+| gzip > data/angsd_matrix/gtlike/wp1_all.maf01_miss85.beagle.gz
 ```
 
-generate a file for filtering desired samples:
+generate a file for filtering desired samples (assuming masking samples from dataset "wp1_all" beagle file):
 ```
 dataset=wp1_subset
 
@@ -186,11 +213,35 @@ run pcangsd:
 ```
 ml pcangsd
 
-dataset=wp1_subset
+dataset=wp1_subsetsf
+dataset=wp1_all
 
 pcangsd \
-    -b data/angsd_matrix/gtlike/wp1_all.filtered.beagle.tmp.gz \
+    -b data/angsd_matrix/gtlike/${dataset}.sf7_sites.beagle.gz \
+    --iter 10000 \
+    -o data/angsd_matrix/${dataset}.sf7_sites.pcangsd
+
+pcangsd \
+    -b data/angsd_matrix/gtlike/wp1_all.sf7_sites.beagle.gz \
     --iter 10000 \
     --filter data/angsd_matrix/bamlists/${dataset}.samplemask.txt \
     -o ${dataset}.filtered.pcangsd
+
+pcangsd \
+    -b data/angsd_matrix/gtlike/wp1_all.maf01_miss85.beagle.gz \
+    --iter 10000 \
+    -o data/angsd_matrix/wp1_all.maf01_miss85.pcangsd
+```
+test:
+```
+zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | awk '$7 > 286 && $5 > 0.01' | cut -f1,2 > 
+
+zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | awk '
+NR==1 {print; next}
+$7 > 286 && $5 > 0.005 &&
+(!($1 in last) || $2 - last[$1] >= 10000) {
+    print
+    last[$1] = $2
+}
+' | wc -l
 ```

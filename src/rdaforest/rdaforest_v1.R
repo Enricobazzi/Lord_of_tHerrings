@@ -83,7 +83,7 @@ cordist <- 1 - cor(t(geno))
 # ordination:
 ord <- capscale(cordist ~ 1)
 # plot(ord$CA$eig/sum(ord$CA$eig),xlab="PC",ylab="proportion of variance explained") # -> first 4 pcs should be good
-pcs.d <- scores(ord, scaling = 1, display = "sites", choices = c(1:4)) 
+pcs.d <- scores(ord, scaling = 1, display = "sites", choices = c(1:10))
 
 # converting lat, lon to great circle distances
 latlon.gcd <- gcd.dist(latlon)[[1]]
@@ -143,7 +143,7 @@ points(latlon$x, latlon$y)
 
 #### HABITAT SUITABILITY TEST ####
 
-for (i in 1:length(rownames(geno))){
+for (i in seq_along(rownames(geno))){
   print(rownames(geno)[i])
   # points(latlon[rownames(geno)[i],1],latlon[rownames(geno)[i],2],pch=0, col = "red")
   
