@@ -227,7 +227,7 @@ for (i in 137:165){
   # save mismatch raster
   writeRaster(mism,
   filename = paste0(
-    "data/rdaforest/env_mismatch/", model_samples_name, ".", sites_name, "/", sample, ".mismatch.tif"
+    "data/rdaforest/env_mismatch/", sites_name, "/", sample, ".mismatch.tif"
     ), overwrite = TRUE
   )
 }
@@ -278,7 +278,7 @@ for (i in seq_along(rest_samples)) {
   # save mismatch raster
   writeRaster(mism,
     filename = paste0(
-      "data/rdaforest/env_mismatch/", all_samples_name, ".", sites_name, "/", sample, ".mismatch.tif"
+      "data/rdaforest/env_mismatch/", sites_name, "/", sample, ".mismatch.tif"
     ), overwrite = TRUE
   )
 }

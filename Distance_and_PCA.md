@@ -50,6 +50,9 @@ select samples to include:
 dataset=wp1_all
 
 grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|Lamichh|MartinezBarrio" | cut -d',' -f1 > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+dataset=wp1_final
+grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|Lamichh|MartinezBarrio|selso|knastorp|kampinge|basel|giecz|fehmarn" | awk -F',' '$9 == "current" || $10 >= 0.1' | cut -d',' -f1 > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
 ```
 
 #### subset to test out snps
@@ -244,4 +247,10 @@ $7 > 286 && $5 > 0.005 &&
     last[$1] = $2
 }
 ' | wc -l
+```
+
+### plot PCA
+
+```
+
 ```
