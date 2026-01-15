@@ -117,128 +117,31 @@ data_table <- get_sample_metadata(sample_data_file, samples)
 sample_ids <- get_sample_ids(data_table, samples)
 matrix <- get_samples_matrix(matrix_file, samples, all_samples)
 
-# grp <- find.clusters(matrix, n.pca = 100, criterion = "diffNgroup", choose.n.clust = FALSE)
-grp <- find.clusters(matrix, n.pca = 100, n.clust = 5)
+# prior on first 4 (>90% of variance explained)
+grp <- find.clusters(matrix, n.pca = 4, n.clust = 5)
 grp
 candidate_grps <- grp$grp
 xval <- xvalDapc(matrix, candidate_grps, n.pca.max = 100,
                  result = "groupMean",
                  n.pca = NULL, n.rep = 50, xval.plot = FALSE)
+
+# n.pca and n.da chosen based on xval results (10 and 4)
 DAPC <- dapc(matrix, candidate_grps,
              n.pca = xval$DAPC$n.pca,
              n.da = xval$DAPC$n.da)
 
+## if loading from saved DAPC object:
+# DAPC <- readRDS("data/angsd_matrix/DAPC_wp1_final_sf7_sites.rds")
 # scatter(DAPC)
 
-# biplot of dapc
-dapc_df <- data.frame(DAPC$ind.coord)
-rownames(dapc_df) <- sample_ids
-dapc_df$loc <- get_locs(sample_ids)
-dapc_df$time <- get_times(data_table, samples)
-dapc_df$group <- DAPC$assign
-
-# add additional rows of sillperioder samples for plotting small circle around them
-sillperioder_samples <- dapc_df |> filter(time == "sillperioder")
-sillperioder_samples$time <- "sillperioder2"
-sillperioder_samples$loc <- "sillperioder2"
-dapc_df <- rbind(dapc_df, sillperioder_samples)
-sample_ids2 <- rownames(dapc_df)
-
-
-# Plot DAPC
-p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2, color = loc, shape = time, size = time)) +
-  geom_point(alpha = 1, stroke = 1.3) +
-  # geom_text_repel(aes(label = sample_ids2), size = 3, max.overlaps = 400) +
-  labs(title = "DAPC of Samples",
-       x = "Discriminant Function 1",
-       y = "Discriminant Function 2",
-       color = "Location",
-       shape = "Time") +
-  theme_minimal() +
-  scale_size_manual(values = c(
-      "historical" = 3,
-      "modern" = 2,
-      "sillperioder" = 2,
-      "sillperioder2" = 3
-  )) +
-  scale_color_manual(values = c(
-    "NE-Atlantic" = "#1b639e",
-    "Norwegian Sea & Fjords" = "#02d97c",
-    "Skagerrak-Kattegat" = "#b370b2",
-    "North Sea" = "#e73f29",
-    "United Kingdom" = "#a6721e",
-    "Other" = "#7a7a7a",
-    "sillperioder2" = "grey25"
-  ))  +
-  scale_shape_manual(values = c(
-    "historical" = 16,
-    "modern" = 18,
-    "sillperioder" = 16,
-    "sillperioder2" = 1
-  )) +
-  theme(legend.position = "right") 
-
-##
-dapc_post <- data.frame(DAPC$posterior)
-rownames(dapc_post) <- sample_ids
-
-# ########################################
+# biplot of dapc - prepare data frame:
 dapc_df <- data.frame(DAPC$ind.coord)
 rownames(dapc_df) <- sample_ids
 dapc_df$loc <- get_locs(sample_ids)
 dapc_df$time <- get_times(data_table, samples)
 dapc_df$group <- DAPC$assign
 dapc_df$group_names <- assign_group_name(dapc_df)
-
-#####
-
-p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2,
-                    fill = loc, color = time, shape = time, size = time, stroke = time)) +
-  geom_point(alpha = 1) +
-  # geom_text_repel(aes(label = sample_ids2), size = 3, max.overlaps = 400) +
-  labs(title = "DAPC of Samples",
-       x = "Discriminant Function 1",
-       y = "Discriminant Function 2",
-       fill = "Location",
-       shape = "Time",
-       stroke = "Time") +
-  theme_minimal() +
-  scale_size_manual(values = c(
-    "historical" = 3.2,
-    "modern" = 2,
-    "sillperioder" = 3
-  )) +
-  scale_fill_manual(values = c(
-    "NE-Atlantic" = "#1b639e",
-    "Norwegian Sea & Fjords" = "#02d97c",
-    "Skagerrak-Kattegat" = "#b370b2",
-    "North Sea" = "#e73f29",
-    "United Kingdom" = "#a6721e",
-    "Other" = "#7a7a7a"
-  ))  +
-  scale_color_manual(values = c(
-    "historical" = "white",
-    "modern" = "white",
-    "sillperioder" = "grey25"
-  ))  +
-  scale_shape_manual(values = c(
-    "historical" = 21,
-    "modern" = 23,
-    "sillperioder" = 21
-  )) +
-  scale_discrete_manual(
-    aesthetics = "stroke",
-    values = c(
-      "historical" = 0.001,
-      "modern" = 0.001,
-      "sillperioder" = 1
-    )
-  ) +
-  theme(legend.position = "right")
-
-
-################################################################################
-
+# dataframe for centroids with names:
 group_means <- dapc_df %>%
   group_by(group) %>%
   summarise(
@@ -246,7 +149,31 @@ group_means <- dapc_df %>%
     mean_LD2 = mean(LD2, na.rm = TRUE),
     group_name = first(group_names)
   )
+da_percent_variance <- round(100 * DAPC$eig / sum(DAPC$eig), 1)
 
+# combine dfs for label repel
+repel_df <- bind_rows(
+  dapc_df %>%
+    mutate(
+      label = NA_character_
+    ),
+  group_means %>%
+    transmute(
+      LD1 = mean_LD1,
+      LD2 = mean_LD2,
+      label = group_name
+    )
+)
+# new df for label positions
+label_positions <- tibble(
+  group = group_means$group,
+  label_x = c(  -4, 2.5, 4.5,    5, -3.5),
+  label_y = c(-0.5,  -6, 4.5, -4.5,  4.5)
+)
+group_means_labeled <- group_means %>%
+  left_join(label_positions, by = "group")
+
+# plot
 p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2,
                     fill = loc, color = time, shape = time,
                     size = time, stroke = time)) +
@@ -259,6 +186,20 @@ p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2,
     linewidth = 0.3,
     alpha = 0.5
   ) +
+  ## lines to the group labels
+  geom_segment(
+    data = group_means_labeled,
+    aes(
+      x = mean_LD1,
+      y = mean_LD2,
+      xend = label_x,
+      yend = label_y
+    ),
+    inherit.aes = FALSE,
+    color = "grey70",
+    linewidth = 0.3,
+    alpha = 0.5
+  ) + 
   ## centroid points
   geom_point(
     data = group_means,
@@ -269,25 +210,24 @@ p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2,
     stroke = 0.2,
     color = "grey70"
   ) +
+  ## ellipseS
   stat_ellipse(aes(group = group), level = 0.68, color = "grey25", linetype = 2, linewidth = 0.1) +
-  geom_point(alpha = 1) +
-  geom_text_repel(
-    data = group_means,
-    aes(x = mean_LD1, y = mean_LD2, label = group_name),
-    nudge_x = 0,           # initial x-offset (optional)
-    nudge_y = 2.5,           # initial y-offset (optional)
+  ## sample points
+  geom_point(alpha = 0.8) +
+  ## group labels (custom positioned)
+  geom_label(
+    data = group_means_labeled,
+    aes(
+      x = label_x,
+      y = label_y,
+      label = group_name
+    ),
     inherit.aes = FALSE,
-    size = 2.5,
+    size = 3,
     color = "grey25",
-    box.padding = 0.3,
-    point.padding = 0.5,
-    segment.color = "grey70",
-    segment.size = 0.3,
-    force = 10,            # increase repelling force
-    max.overlaps = Inf
+    linewidth = 0.15,
+    fill = "white"
   ) +
-  ## original points
-  
   theme_minimal() +
   scale_size_manual(values = c(
     "historical" = 3.2,
@@ -317,15 +257,15 @@ p1 <- ggplot(dapc_df, aes(x = LD1, y = LD2,
     values = c(
       "historical" = 0.001,
       "modern" = 0.001,
-      "sillperioder" = 1
+      "sillperioder" = 0.6
     )
   ) +
   labs(title = "Discriminant Analysis of Principal Components (DAPC)",
-       x = "Discriminant Function 1",
-       y = "Discriminant Function 2") +
+       x = paste0("Discriminant Function 1 (", da_percent_variance[1], "%)"),
+       y = paste0("Discriminant Function 2 (", da_percent_variance[2], "%)")) +
   theme(legend.position = "none")
 
-# p1
+p1
 
 location_cols <- c(
   "Iceland & Faroe Islands" = "#1b639e",
@@ -340,7 +280,7 @@ legend_locations <- ggplot(
     location = names(location_cols),
     y = seq_along(location_cols)
   ),
-  aes(x = 1, y = y)
+  aes(x = 0.2, y = y)
 ) +
   geom_tile(
     aes(fill = location),
@@ -348,7 +288,7 @@ legend_locations <- ggplot(
     height = 0.35
   ) +
   geom_text(
-    aes(x = 2.2, label = location),
+    aes(x = 0.7, label = location),
     hjust = 0,
     size = 3
   ) +
@@ -367,9 +307,9 @@ legend_locations <- ggplot(
 # legend_locations
 
 time_shapes <- c(
-  "historical" = 16,
-  "modern" = 18,
-  "sillperioder" = 21
+  "Historical" = 16,
+  "Modern" = 18,
+  "Sillperioder" = 21
 )
 
 legend_times <- ggplot(
@@ -377,14 +317,14 @@ legend_times <- ggplot(
     time = names(time_shapes),
     y = seq_along(time_shapes)
   ),
-  aes(x = 1, y = y)
+  aes(x = 0.375, y = y)
 ) +
   geom_point(
     aes(shape = time),
-    size = 2.5
+    size = 2
   ) +
   geom_text(
-    aes(x = 2.2, label = time),
+    aes(x = 0.7, label = time),
     hjust = 0,
     size = 3
   ) +
@@ -441,4 +381,36 @@ ggsave("plots/angsd_matrix/dapc_wp1_final_sf7_sites.png",
        width = 8,
        height = 5,
        dpi = 300)
+ggsave("plots/angsd_matrix/dapc_wp1_final_sf7_sites.pdf",
+       plot = final_plot,
+       width = 8,
+       height = 5)
 
+# Save DAPC object
+saveRDS(DAPC, file = "data/angsd_matrix/DAPC_wp1_final_sf7_sites.rds")
+
+####################################################################################
+
+historical <- dapc_df %>%
+  filter(time == "historical")
+
+sillperioder <- dapc_df %>%
+  filter(time == "sillperioder")
+
+modern_uk <- dapc_df %>%
+  filter(group_names == "United Kingdom" & time == "modern")
+
+zz <- dapc_df |> 
+  filter(time != "modern")
+
+nosill_kattskag <- dapc_df %>%
+  filter((time != "sillperioder" & loc == "Skagerrak-Kattegat"))
+
+# https://mikkovihtakari.github.io/ggOceanMaps/index.html
+
+post <- data.frame(DAPC$posterior)
+rownames(post) <- sample_ids
+post$loc <- get_locs(sample_ids)
+post$time <- get_times(data_table, samples)
+post$group <- DAPC$assign
+post$group_names <- assign_group_name(post)
