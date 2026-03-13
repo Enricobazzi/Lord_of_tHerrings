@@ -732,9 +732,9 @@ NsFA,clupea_harengus,NW-ATL,Canada(Northumberland Strait),autumn,2014,-62.6,45.7
 NsFB,clupea_harengus,NW-ATL,Canada(Northumberland Strait),autumn,2014,-62.6,45.733333333333300,Lamichhaney_2017,0.019399,northumberland_2,modern
 NsSA,clupea_harengus,NW-ATL,Canada(Northumberland Strait),spring,2014,-64.15,46.31666666666670,Lamichhaney_2017,0.061869,northumberland_3,modern
 NsSB,clupea_harengus,NW-ATL,Canada(Northumberland Strait),spring,2014,-64.15,46.31666666666670,Lamichhaney_2017,0.020538,northumberland_4,modern
-NSSH33,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,6.166666666666670,58.1,Han_2020,9.715846,norwegian_38,modern
-NSSH34,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,6.166666666666670,58.1,Han_2020,12.091132,norwegian_39,modern
-NSSH36,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,6.166666666666670,58.1,Han_2020,9.768813,norwegian_40,modern
+NSSH33,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,9.78333,67.76666,Han_2020,9.715846,norwegian_38,modern
+NSSH34,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,9.78333,67.76666,Han_2020,12.091132,norwegian_39,modern
+NSSH36,clupea_harengus,NE-ATL,NorwegianSea,spring,2017,9.78333,67.76666,Han_2020,9.768813,norwegian_40,modern
 Pacific16,clupea_pallasii,E-PACIFIC,Pacific_BC,NA,2012,-123.87275,49.35685,Han_2020,42.296821,britishcolumbia_1,modern
 Pacific3,clupea_pallasii,E-PACIFIC,Pacific_BC,NA,2012,-123.87272,49.35685,Han_2020,35.619914,britishcolumbia_2,modern
 Pacific30,clupea_pallasii,E-PACIFIC,Pacific_BC,NA,2012,-123.87269,49.35685,Han_2020,18.928262,britishcolumbia_3,modern
