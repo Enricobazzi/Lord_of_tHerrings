@@ -39,3 +39,36 @@ sbatch \
     --error=logs/angsd_matrix/doibs.${dataset}.err \
     src/angsd_matrix/angsd_doibs_makematrix.sh ${dataset} ${sites}
 ```
+
+## 
+
+vasa subsample for pca plotting:
+```
+dataset=vasa_sub
+# sample list
+grep "harengus" data/samples_table.csv | \
+    grep -v NA | \
+    grep -E "BALTIC|TRANS|norwegian|stavanger|karmoy|more|northsea|historical" | \
+    awk -F',' '$9 == "current" || $10 >= 0.1' | \
+    cut -d',' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+dataset=vasa_baltic
+# sample list
+grep "harengus" data/samples_table.csv | \
+    grep -v NA | \
+    grep -E "BALTIC|fehmarn" | \
+    awk -F',' '$9 == "current" || $10 >= 0.1' | \
+    cut -d',' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+dataset=vasa_balticautumn
+grep "harengus" data/samples_table.csv | \
+    grep -v NA | \
+    grep -E "BALTIC|fehmarn" | \
+    grep -vE "kalix|hastkar|blekinge|kalmarsund|gavle_5" | \
+    awk -F',' '$9 == "current" || $10 >= 0.1' | \
+    cut -d',' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+```

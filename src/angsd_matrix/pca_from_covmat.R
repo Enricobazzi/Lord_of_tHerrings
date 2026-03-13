@@ -48,16 +48,16 @@ get_sample_ids <- function(sample_metadata, samples) {
 
 get_locs <- function(sample_ids) {
   loc <- ifelse(
-    stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("iceland", "faroe",
-                                                                     "norwegian"),
-    "NE-Atlantic",
+    stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("iceland", 
+                                                                     "faroe"),
+    "Iceland & Faroe Islands",
     ifelse(
-      stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("more",
+      stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("more", "norwegian",
                                                                        "haugesund", "karmoy",
                                                                        "rovaer", "bergen",
                                                                        "stavanger", "foldfjorden",
-                                                                       "norway"),
-      "Norway Fjords",
+                                                                       "norway", "unknown"),
+      "Norwegian",
       ifelse(
         stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("idefjord", "maseskar",
                                                                          "kaupang", "risor",
@@ -75,8 +75,27 @@ get_locs <- function(sample_ids) {
             stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("celtic",
                                                                              "downs", "isleofman", "york",
                                                                              "scotland", "lyminge"),
-            "United Kingdom",
-            "Other"
+            "Britain & Ireland",
+            ifelse(
+              stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("hastkar",
+                                                                               "gavle", "kalix",
+                                                                               "hogsten", "umea"),
+              "Bothnia",
+              ifelse(
+                stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("fehmarn",
+                                                                                 "selso", "kampinge",
+                                                                                 "knastorp"),
+                "Skåne & Belt",
+                ifelse(
+                  stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("truso", "budzistowo",
+                                                                                   "kalmarsund", "karlskrona",
+                                                                                   "blekinge", "vasa"),
+                  "Baltic Proper",
+                  "Other"
+                )
+                
+              )
+            )
           )
         )
       )
@@ -138,36 +157,42 @@ plot_pca <- function(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TR
              y = paste0(paste0("PC", pc_y), " (", round(variance_explained[pc_y], 2), "%)"),
              title = "PCA of samples based on covariance matrix") +
         scale_color_manual(values = c(
-          "NE-Atlantic" = "#1b639e",
-          "Norway Fjords" = "#02d97c",
+          "Iceland & Faroe Islands" = "#1b639e",
+          "Norwegian" = "#02d97c",
           "Skagerrak-Kattegat" = "#b370b2",
           "North Sea" = "#e73f29",
-          "United Kingdom" = "#a6721e",
+          "Britain & Ireland" = "#a6721e",
+          "Bothnia" = "#440154FF",
+          "Skåne & Belt" = "#FB9A99",
+          "Baltic Proper" = "#FDBF6F",
           "Other" = "#7a7a7a"
         )) +
-        scale_shape_manual(values = c("historical" = 1, "modern" = 18, "sill" = 16))
+        scale_shape_manual(values = c("historical" = 16, "modern" = 18, "sillperioder" = 16))
     )
   } else if (labels == FALSE) {
   return(
       ggplot(pca_df,
-    aes(x = !!sym(paste0("PC", pc_x)), y = !!sym(paste0("PC", pc_y)),
-        color = location, shape = time)) +
-    geom_point(size = 3) +
-    theme_minimal() +
-    labs(x = paste0(paste0("PC", pc_x), " (", round(variance_explained[pc_x], 2), "%)"),
-         y = paste0(paste0("PC", pc_y), " (", round(variance_explained[pc_y], 2), "%)"),
-         title = "PCA of samples based on covariance matrix") +
-    scale_color_manual(values = c(
-      "NE-Atlantic" = "#1b639e",
-      "Norway Fjords" = "#02d97c",
-      "Skagerrak-Kattegat" = "#b370b2",
-      "North Sea" = "#e73f29",
-      "United Kingdom" = "#a6721e",
-      "Other" = "#7a7a7a"
-    )) +
-    scale_shape_manual(values = c("historical" = 1, "modern" = 18, "sill" = 16))
-  )
- }
+             aes(x = !!sym(paste0("PC", pc_x)), y = !!sym(paste0("PC", pc_y)),
+                 color = location, shape = time)) +
+        geom_point(size = 3) +
+        theme_minimal() +
+        labs(x = paste0(paste0("PC", pc_x), " (", round(variance_explained[pc_x], 2), "%)"),
+             y = paste0(paste0("PC", pc_y), " (", round(variance_explained[pc_y], 2), "%)"),
+             title = "PCA of samples based on covariance matrix") +
+        scale_color_manual(values = c(
+          "Iceland & Faroe Islands" = "#1b639e",
+          "Norwegian" = "#02d97c",
+          "Skagerrak-Kattegat" = "#b370b2",
+          "North Sea" = "#e73f29",
+          "Britain & Ireland" = "#a6721e",
+          "Bothnia" = "#440154FF",
+          "Skåne & Belt" = "#FB9A99",
+          "Baltic Proper" = "#FDBF6F",
+          "Other" = "#7a7a7a"
+        )) +
+        scale_shape_manual(values = c("historical" = 16, "modern" = 18, "sillperioder" = 16))
+      )
+  }
 }
 
 read_arguments <- function() {
@@ -192,7 +217,10 @@ if (length(args) == 3) {
   sites_name <- args[3]
 } else {
   all_samples_name <- "wp1_all"
+  # all_samples_name <- "vasa_ship"
   subset_samples_name <- "wp1_final"
+  # subset_samples_name <- "vasa_sub"
+  # subset_samples_name <- "vasa_balticautumn"
   sites_name <- "sf7_sites"
 }
 
@@ -200,6 +228,7 @@ all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sa
 subset_samples_file <- paste0("data/angsd_matrix/bamlists/", subset_samples_name, ".sample_list.txt")
 # subset_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
 matrix_file <- paste0("data/angsd_matrix/", all_samples_name, ".", sites_name, ".pcangsd.cov")
+# matrix_file <- paste0("data/angsd_matrix/output/", all_samples_name, ".covMat")
 sample_data_file <- "data/samples_table.csv"
 
 all_samples <- get_samples_from_file(all_samples_file)
@@ -213,14 +242,20 @@ pca_df <- build_pca_df(matrix, data_table, samples, npcs = 10)
 variance_explained <- get_percent_variance(matrix, npcs = 10)
 
 pca_plot_labels <- plot_pca(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TRUE)
+pca_plot_labels
 pca_plot <- plot_pca(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = FALSE)
+plot_pca(pca_df, variance_explained, pc_x = 3, pc_y = 4, labels = TRUE)
 
 ggsave(pca_plot_labels,
-  filename = paste0("plots/angsd_matrix/", all_samples_name, ".", subset_samples_name, ".", sites_name, ".labels.pdf"),
+  filename = paste0(
+    "plots/angsd_matrix/", all_samples_name, ".", subset_samples_name, ".", sites_name, ".labels.pdf"
+    ),
   width = 12, height = 10
 )
 ggsave(pca_plot,
-  filename = paste0("plots/angsd_matrix/", all_samples_name, ".", subset_samples_name, ".", sites_name, ".pdf"),
+  filename = paste0(
+    "plots/angsd_matrix/", all_samples_name, ".", subset_samples_name, ".", sites_name, ".pdf"
+    ),
   width = 12, height = 10
 )
 
