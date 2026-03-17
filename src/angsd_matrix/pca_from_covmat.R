@@ -167,7 +167,7 @@ plot_pca <- function(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TR
           "Baltic Proper" = "#FDBF6F",
           "Other" = "#7a7a7a"
         )) +
-        scale_shape_manual(values = c("historical" = 16, "modern" = 18, "sillperioder" = 16))
+        scale_shape_manual(values = c("historical" = 1, "modern" = 18, "sillperioder" = 16))
     )
   } else if (labels == FALSE) {
   return(
@@ -190,7 +190,7 @@ plot_pca <- function(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TR
           "Baltic Proper" = "#FDBF6F",
           "Other" = "#7a7a7a"
         )) +
-        scale_shape_manual(values = c("historical" = 16, "modern" = 18, "sillperioder" = 16))
+        scale_shape_manual(values = c("historical" = 1, "modern" = 18, "sillperioder" = 16))
       )
   }
 }
@@ -222,12 +222,13 @@ if (length(args) == 3) {
   # subset_samples_name <- "vasa_sub"
   # subset_samples_name <- "vasa_balticautumn"
   sites_name <- "sf7_sites"
+  # sites_name <- "chr12"
 }
 
 all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
 subset_samples_file <- paste0("data/angsd_matrix/bamlists/", subset_samples_name, ".sample_list.txt")
 # subset_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
-matrix_file <- paste0("data/angsd_matrix/", all_samples_name, ".", sites_name, ".pcangsd.cov")
+matrix_file <- paste0("data/angsd_matrix/pcangsd/", all_samples_name, ".", sites_name, ".pcangsd.cov")
 # matrix_file <- paste0("data/angsd_matrix/output/", all_samples_name, ".covMat")
 sample_data_file <- "data/samples_table.csv"
 
@@ -242,9 +243,9 @@ pca_df <- build_pca_df(matrix, data_table, samples, npcs = 10)
 variance_explained <- get_percent_variance(matrix, npcs = 10)
 
 pca_plot_labels <- plot_pca(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TRUE)
-pca_plot_labels
+#pca_plot_labels
 pca_plot <- plot_pca(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = FALSE)
-plot_pca(pca_df, variance_explained, pc_x = 3, pc_y = 4, labels = TRUE)
+#pca_plot
 
 ggsave(pca_plot_labels,
   filename = paste0(
@@ -258,5 +259,4 @@ ggsave(pca_plot,
     ),
   width = 12, height = 10
 )
-
 

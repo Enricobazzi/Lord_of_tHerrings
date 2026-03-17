@@ -85,6 +85,18 @@ grep "masthugget" data/samples_table.csv | cut -d',' -f1 >> data/angsd_matrix/ba
 
 ```
 
+#### all useful samples
+```
+dataset=full_herr
+
+grep "harengus" data/samples_table.csv | \
+    grep -v NA | \
+    grep -vE "NW-ATL|Lamichh|MartinezBarrio|HER135" | \
+    awk -F',' '$9 == "current" || $10 >= 0.1' | \
+    cut -d',' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+```
+
 #### create bamlist
 
 create bamlist from sample file:
@@ -92,12 +104,22 @@ create bamlist from sample file:
 dataset=test
 dataset=wp1_all
 dataset=wp1_subset
+dataset=full_herr
 
 for sample in $(cat data/angsd_matrix/bamlists/${dataset}.sample_list.txt); do
     if [[ -f data/bams/${sample}.merged.rmdup.merged.realn.rescaled.bam ]]; then
       input_bam=data/bams/${sample}.merged.rmdup.merged.realn.rescaled.bam
     elif [[ -f data/bams/${sample}.merged.rmdup.merged.realn.bam ]]; then
       input_bam=data/bams/${sample}.merged.rmdup.merged.realn.bam
+    else
+      echo "error: bam file for sample ${sample} not found!"
+    fi
+    echo ${input_bam}
+done > data/angsd_matrix/bamlists/${dataset}.bamlist
+
+for sample in $(cat data/angsd_matrix/bamlists/${dataset}.sample_list.txt); do
+    if [[ -f data/bams/${sample}.subsampled_3X.bam ]]; then
+      input_bam=data/bams/${sample}.subsampled_3X.bam
     else
       echo "error: bam file for sample ${sample} not found!"
     fi
@@ -162,6 +184,7 @@ see [PCangsd](https://www.popgen.dk/software/index.php/PCAngsd)
 
 ```
 dataset=wp1_all
+dataset=full_herr
 
 # sbatch
 sbatch \
@@ -252,5 +275,54 @@ $7 > 286 && $5 > 0.005 &&
 ### plot PCA
 
 ```
+src/angsd_matrix/pca_from_covmat.R
+src/angsd_matrix/dapc_v2.R
+```
 
+## Analyze North-South inversions
+
+Inversion coordinates from [Jamsandekar et al. 2024](https://www.nature.com/articles/s41467-024-53079-7)
+    - Chr6:22,282,765-24,868,682
+    - Chr12:17,826,318-25,603,093
+    - Chr17:25,802,209-27,568,510
+    - Chr23:16,225,343-17,604,279
+
+Made into a [ns_inversions bed file](data/angsd_matrix/sites/ns_inversions.bed)
+
+### Create a mask file to filter site in PCAngsd
+
+Get file for PCAngsd's `--filter-sites` flag for input filtering by crossing the bed file with the angsd MAF file
+
+```
+ml bedtools
+
+# transform MAF to BED
+zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | cut -f1,2 | tail -n +2 | awk '{print $1, $2 - 1, $2}' | tr ' ' '\t' \
+    > data/angsd_matrix/sites/wp1_all.bed
+
+# use intersect - all inversions
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/wp1_all.bed \
+    -b data/angsd_matrix/sites/ns_inversions.bed \
+    | cut -f4 > data/angsd_matrix/sites/ns_inversions.sitemask
+
+# use intersect - chromosome 12 inversion
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/wp1_all.bed \
+    -b <(grep "NC_045163.1" data/angsd_matrix/sites/ns_inversions.bed) \
+    | cut -f4 > data/angsd_matrix/sites/ns_inversions.chr12.sitemask
+```
+
+### Run PCAngsd on inversion sites
+
+Use `--filter-sites` to only use variants in sitemask file
+
+```
+ml pcangsd
+
+pcangsd \
+    -b data/angsd_matrix/gtlike/wp1_all.beagle.gz \
+    --iter 10000 \
+    --filter-sites data/angsd_matrix/sites/ns_inversions.chr12.sitemask \
+    -o data/angsd_matrix/pcangsd/wp1_all.chr12.pcangsd
 ```
