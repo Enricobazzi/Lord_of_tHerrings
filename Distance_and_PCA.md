@@ -53,6 +53,9 @@ grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|La
 
 dataset=wp1_final
 grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|Lamichh|MartinezBarrio|selso|knastorp|kampinge|basel|giecz|fehmarn" | awk -F',' '$9 == "current" || $10 >= 0.1' | cut -d',' -f1 > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
+
+dataset=wp1_final_bal
+grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "NW-ATL|Lamichh|MartinezBarrio|selso|knastorp|kampinge|basel|giecz|malanieszawka|kaldus|truso|budzistowo|kadriorgwreck|karlskrona|hogsten|umea|vasa" | awk -F',' '$9 == "current" || $10 >= 0.1' | cut -d',' -f1 > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
 ```
 
 #### subset to test out snps
@@ -79,10 +82,10 @@ grep "harengus" data/samples_table.csv | grep -v NA | grep -vE "BALTIC|NW-ATL|La
     tr ',' ' ' | awk '$6 > 1900' | grep -v "ND" | cut -d' ' -f1 \
     > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
 
-dataset=wp1_modern_masthugget
-cp data/angsd_matrix/bamlists/wp1_modern.sample_list.txt data/angsd_matrix/bamlists/${dataset}.sample_list.txt
-grep "masthugget" data/samples_table.csv | cut -d',' -f1 >> data/angsd_matrix/bamlists/${dataset}.sample_list.txt
-
+dataset=wp1_modern_bal
+grep "harengus" data/samples_table.csv | grep -v NA | grep "modern" | grep -vE "NW-ATL|Lamichh|MartinezBarrio" | \
+    tr ',' ' ' | cut -d' ' -f1 \
+    > data/angsd_matrix/bamlists/${dataset}.sample_list.txt
 ```
 
 #### all useful samples
@@ -208,6 +211,8 @@ zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | awk '$7 > 286 && $5 > 0.01' | cu
 
 ### run pcangsd
 
+#### filter sites
+
 filter the beagle file to only include sites from sites file:
 ```
 zcat data/angsd_matrix/gtlike/wp1_all.beagle.gz \
@@ -225,6 +230,27 @@ NR==1 || ($1 in sites)
 | gzip > data/angsd_matrix/gtlike/wp1_all.maf01_miss85.beagle.gz
 ```
 
+alternatively get a file for PCAngsd's `--filter-sites` flag for input filtering by crossing the bed file with the angsd MAF file:
+
+```
+ml bedtools
+
+dataset=full_herr
+sites=supplementary_file_7.v2
+
+# transform MAF to BED
+zcat data/angsd_matrix/gtlike/${dataset}.mafs.gz | cut -f1,2 | tail -n +2 | awk '{print $1, $2 - 1, $2}' | tr ' ' '\t' \
+    > data/angsd_matrix/sites/${dataset}.bed
+
+# use intersect to get mask
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/${dataset}.bed \
+    -b data/angsd_matrix/sites/${sites}.bed \
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.${sites}.sitemask
+```
+
+#### filter individuals
+
 generate a file for filtering desired samples (assuming masking samples from dataset "wp1_all" beagle file):
 ```
 dataset=wp1_subset
@@ -235,7 +261,10 @@ awk 'NR==FNR{a[$0];next}{print ($0 in a)?1:0}' \
     > data/angsd_matrix/bamlists/${dataset}.samplemask.txt
 ```
 
-run pcangsd:
+#### run!
+
+run pcangsd interactively:
+
 ```
 ml pcangsd
 
@@ -257,8 +286,31 @@ pcangsd \
     -b data/angsd_matrix/gtlike/wp1_all.maf01_miss85.beagle.gz \
     --iter 10000 \
     -o data/angsd_matrix/wp1_all.maf01_miss85.pcangsd
+
+# # #
+
+ml pcangsd
+
+dataset=full_herr
+sites=supplementary_file_7.v2
+
+pcangsd \
+    -b data/angsd_matrix/gtlike/${dataset}.beagle.gz \
+    --iter 10000 \
+    --filter-sites data/angsd_matrix/sites/${dataset}.${sites}.sitemask \
+    -o data/angsd_matrix/pcangsd/${dataset}.${sites}.pcangsd
 ```
-test:
+
+or sbatch:
+
+```
+dataset=full_herr
+sites=supplementary_file_7.v2
+sbatch src/angsd_matrix/pcangsd_sbatch.sh ${dataset} ${sites}
+```
+
+#### test:
+
 ```
 zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | awk '$7 > 286 && $5 > 0.01' | cut -f1,2 > 
 
@@ -277,6 +329,10 @@ $7 > 286 && $5 > 0.005 &&
 ```
 src/angsd_matrix/pca_from_covmat.R
 src/angsd_matrix/dapc_v2.R
+
+for sites in supplementary_file_7.v2 ns_inversions ns_inversions.chr6 ns_inversions.chr12 ns_inversions.chr17 ns_inversions.chr23 ; do
+Rscript src/angsd_matrix/pca_from_covmat.R full_herr wp1_final_bal ${sites}
+done
 ```
 
 ## Analyze North-South inversions
@@ -289,31 +345,53 @@ Inversion coordinates from [Jamsandekar et al. 2024](https://www.nature.com/arti
 
 Made into a [ns_inversions bed file](data/angsd_matrix/sites/ns_inversions.bed)
 
-### Create a mask file to filter site in PCAngsd
+### with PCAngsd
+
+#### Create a mask file to filter site in PCAngsd
 
 Get file for PCAngsd's `--filter-sites` flag for input filtering by crossing the bed file with the angsd MAF file
 
 ```
 ml bedtools
 
-# transform MAF to BED
-zcat data/angsd_matrix/gtlike/wp1_all.mafs.gz | cut -f1,2 | tail -n +2 | awk '{print $1, $2 - 1, $2}' | tr ' ' '\t' \
-    > data/angsd_matrix/sites/wp1_all.bed
+dataset=full_herr
+
+# transform MAF to BED (already done above)
+# zcat data/angsd_matrix/gtlike/${dataset}.mafs.gz | cut -f1,2 | tail -n +2 | awk '{print $1, $2 - 1, $2}' | tr ' ' '\t' \
+#     > data/angsd_matrix/sites/${dataset}.bed
 
 # use intersect - all inversions
 bedtools intersect -c \
-    -a data/angsd_matrix/sites/wp1_all.bed \
+    -a data/angsd_matrix/sites/${dataset}.bed \
     -b data/angsd_matrix/sites/ns_inversions.bed \
-    | cut -f4 > data/angsd_matrix/sites/ns_inversions.sitemask
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.ns_inversions.sitemask
+
+# use intersect - chromosome 6 inversion
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/${dataset}.bed \
+    -b <(grep "NC_045157.1" data/angsd_matrix/sites/ns_inversions.bed) \
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.ns_inversions.chr6.sitemask
 
 # use intersect - chromosome 12 inversion
 bedtools intersect -c \
-    -a data/angsd_matrix/sites/wp1_all.bed \
+    -a data/angsd_matrix/sites/${dataset}.bed \
     -b <(grep "NC_045163.1" data/angsd_matrix/sites/ns_inversions.bed) \
-    | cut -f4 > data/angsd_matrix/sites/ns_inversions.chr12.sitemask
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.ns_inversions.chr12.sitemask
+
+# use intersect - chromosome 17 inversion
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/${dataset}.bed \
+    -b <(grep "NC_045168.1" data/angsd_matrix/sites/ns_inversions.bed) \
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.ns_inversions.chr17.sitemask
+
+# use intersect - chromosome 23 inversion
+bedtools intersect -c \
+    -a data/angsd_matrix/sites/${dataset}.bed \
+    -b <(grep "NC_045174.1" data/angsd_matrix/sites/ns_inversions.bed) \
+    | cut -f4 > data/angsd_matrix/sites/${dataset}.ns_inversions.chr23.sitemask
 ```
 
-### Run PCAngsd on inversion sites
+#### Run PCAngsd on inversion sites
 
 Use `--filter-sites` to only use variants in sitemask file
 
@@ -325,4 +403,31 @@ pcangsd \
     --iter 10000 \
     --filter-sites data/angsd_matrix/sites/ns_inversions.chr12.sitemask \
     -o data/angsd_matrix/pcangsd/wp1_all.chr12.pcangsd
+```
+
+or sbatch:
+
+```
+dataset=full_herr
+for sites in ns_inversions ns_inversions.chr6 ns_inversions.chr12 ns_inversions.chr17 ns_inversions.chr23; do
+    sbatch src/angsd_matrix/pcangsd_sbatch.sh ${dataset} ${sites}
+done
+```
+
+### from the GT-likelihoods directly
+
+filter the beagle file to only include sites from sitemask file:
+
+```
+dataset=full_herr
+beaglefile=data/angsd_matrix/gtlike/${dataset}.beagle.gz
+
+for sites in supplementary_file_7.v2 ns_inversions ns_inversions.chr6 ns_inversions.chr12 ns_inversions.chr17 ns_inversions.chr23;
+    sitemask=data/angsd_matrix/sites/${dataset}.${sites}.sitemask
+    
+    zcat ${beaglefile} | head -1 > ${dataset}.${sites}.filtered.beagle
+    
+    paste <(zcat ${beaglefile} | tail -n +2) <(cat ${sitemask}) | \
+        awk '$NF == 1 {NF--; print}' >> ${dataset}.${sites}.filtered.beagle
+done
 ```
