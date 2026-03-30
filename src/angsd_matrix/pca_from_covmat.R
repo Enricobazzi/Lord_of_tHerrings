@@ -90,7 +90,7 @@ get_locs <- function(sample_ids) {
                   stringr::str_split(sample_ids, "_", simplify = TRUE)[, 1] %in% c("truso", "budzistowo",
                                                                                    "kalmarsund", "karlskrona",
                                                                                    "blekinge", "vasa"),
-                  "Baltic Proper",
+                  "Central Baltic",
                   "Other"
                 )
                 
