@@ -27,5 +27,5 @@ realSFS saf2theta ${saf} -cores ${THREADS} -fold 1 -sfs ${sfs} -outname ${OUT}/$
 thetaStat do_stat ${OUT}/${dataset}.folded.thetas.idx \
     -win ${WINDOWSIZE} \
     -step ${WINDOWSTEP} \
-    -outnames ${OUT}/${dataset}.folded.thetas.W${WINDOWSIZE}.S${WINDOWSTEP}.gz
+    -outnames ${OUT}/${dataset}.folded.thetas.W${WINDOWSIZE}.S${WINDOWSTEP}
 
