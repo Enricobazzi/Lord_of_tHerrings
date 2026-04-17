@@ -121,3 +121,27 @@ for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
         src/diversity/run_realsfs.sh ${dataset}
 done
 ```
+
+### ANGSD DO SAF (POSTPROB)
+
+```
+for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+    sbatch \
+        --job-name=${dataset}.dosafpest \
+        --output=logs/diversity/dosafpest.${dataset}.out \
+        --error=logs/diversity/dosafpest.${dataset}.err \
+        src/diversity/angsd_dosaf_postprob.sh ${dataset}
+done
+```
+
+### THETASTAT
+
+```
+for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+    sbatch \
+        --job-name=${dataset}.dosafpest \
+        --output=logs/diversity/dosafpest.${dataset}.out \
+        --error=logs/diversity/dosafpest.${dataset}.err \
+        src/diversity/run_thetastat.sh ${dataset}
+done
+```

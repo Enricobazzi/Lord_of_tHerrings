@@ -3,8 +3,8 @@
 #SBATCH -p shared
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH -t 0-06:00:00
-#SBATCH --mem=64G
+#SBATCH -t 0-24:00:00
+#SBATCH --mem=128G
 
 # load software
 ml angsd
@@ -21,4 +21,4 @@ saf=${OUT}/${dataset}.folded.saf.idx
 sfs=${OUT}/${dataset}.folded.sfs
 
 # run realSFS
-realSFS ${saf} -cores ${THREADS} -fold 1 > ${sfs}
+realSFS ${saf} -cores ${THREADS} -fold 1 -maxiter 1000 > ${sfs}
