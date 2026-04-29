@@ -31,6 +31,7 @@ samples <- samples[samples != "HER135"] # Exclude sample HER135 - should be fixe
 
 # read samples metadata
 tab <- read.table("data/samples_table.csv", sep = ",", header = TRUE, na.strings = c("UNKNOWN", "NA"))
+# tab <- read.table("~/Documents/Silly-periods/data/samples_table.csv", sep = ",", header = TRUE, na.strings = c("UNKNOWN", "NA"))
 tab <- tab %>%
   filter(sample_id %in% samples)
 

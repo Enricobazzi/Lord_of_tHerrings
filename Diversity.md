@@ -133,3 +133,62 @@ for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
         src/diversity/run_thetastat.sh ${dataset}
 done
 ```
+
+## ALTERNATIVE - CALCULATE INDIVIDUAL HET
+
+### RUN SAF AND REALSFS:
+
+```
+for sample in $(cat data/angsd_matrix/bamlists/full_herr.sample_list.txt); do
+    echo "${sample}"
+    sbatch \
+        --job-name=${sample}.indhet \
+        --output=logs/diversity/indhet.${sample}.out \
+        --error=logs/diversity/indhet.${sample}.err \
+        src/diversity/angsd_saf_het.sh ${sample}
+done
+```
+
+### MANUALLY FROM BCF:
+
+```
+for sample in $(cat data/angsd_matrix/bamlists/full_herr.sample_list.txt); do
+    echo "${sample}"
+    sbatch \
+        --job-name=${sample}.bcfhet \
+        --output=logs/diversity/bcfhet.${sample}.out \
+        --error=logs/diversity/bcfhet.${sample}.err \
+        src/diversity/het_from_bcf.sh ${sample}
+done
+
+# This is shit because heterozygosity and depth(number of sites) is highly correlated
+```
+
+## CALCULATE DIVERSITY ONLY OF SUBSET OF SNPS
+
+### CREATE BED FILES OF THETA VALUES
+
+```
+for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+    echo "${dataset}"
+    sbatch \
+        --job-name=${dataset}.thetabed \
+        --output=logs/diversity/thetabed.${dataset}.out \
+        --error=logs/diversity/thetabed.${dataset}.err \
+        src/diversity/get_thetas_bed.sh ${dataset}
+done
+```
+
+### INTERSECT WITH BED OF SNPS
+
+```
+ml bedtools
+
+for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+    echo "${dataset}"
+    bedtools intersect -wa \
+        -a data/diversity/output/${dataset}.folded.thetas.bed \
+        -b data/angsd_matrix/sites/supplementary_file_7.v2.bed \
+        > data/diversity/output/${dataset}.supplementary_file_7.v2.bed
+done
+```
