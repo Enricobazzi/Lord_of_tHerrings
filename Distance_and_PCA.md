@@ -159,6 +159,7 @@ Individual base sampling avoids snp/gt-likelihood calling.
 
 dataset=test
 dataset=wp1_subset
+dataset=wp1_all
 
 sites=data/angsd_matrix/sites/supplementary_file_7.v2.sites
 

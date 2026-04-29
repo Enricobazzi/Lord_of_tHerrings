@@ -101,13 +101,13 @@ assign_group_name <- function(df) {
 }
 
 
-all_samples_name <- "wp1_all"
-subset_samples_name <- "wp1_final"
-sites_name <- "sf7_sites"
+all_samples_name <- "full_herr"
+subset_samples_name <- "wp1_all"
+sites_name <- "supplementary_file_7.v2"
 all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
 subset_samples_file <- paste0("data/angsd_matrix/bamlists/", subset_samples_name, ".sample_list.txt")
 # subset_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
-matrix_file <- paste0("data/angsd_matrix/", all_samples_name, ".", sites_name, ".pcangsd.cov")
+matrix_file <- paste0("data/angsd_matrix/pcangsd/", all_samples_name, ".", sites_name, ".pcangsd.cov")
 sample_data_file <- "data/samples_table.csv"
 all_samples <- get_samples_from_file(all_samples_file)
 all_samples <- all_samples[all_samples != "HER135"] # Exclude sample HER135 - should be fixed in the future
@@ -117,18 +117,18 @@ data_table <- get_sample_metadata(sample_data_file, samples)
 sample_ids <- get_sample_ids(data_table, samples)
 matrix <- get_samples_matrix(matrix_file, samples, all_samples)
 
-# # prior on first 4 (>90% of variance explained)
-# grp <- find.clusters(matrix, n.pca = 4, n.clust = 6)
-# grp
-# candidate_grps <- grp$grp
-# xval <- xvalDapc(matrix, candidate_grps, n.pca.max = 100,
-#                  result = "groupMean",
-#                  n.pca = NULL, n.rep = 50, xval.plot = FALSE)
-# 
-# # n.pca and n.da chosen based on xval results (10 and 4)
-# DAPC <- dapc(matrix, candidate_grps,
-#              n.pca = xval$DAPC$n.pca,
-#              n.da = xval$DAPC$n.da)
+# prior on first 4 (>90% of variance explained)
+grp <- find.clusters(matrix, n.pca = 4, n.clust = 6)
+grp
+candidate_grps <- grp$grp
+xval <- xvalDapc(matrix, candidate_grps, n.pca.max = 100,
+                 result = "groupMean",
+                 n.pca = NULL, n.rep = 50, xval.plot = FALSE)
+
+# n.pca and n.da chosen based on xval results (10 and 4)
+DAPC <- dapc(matrix, candidate_grps,
+             n.pca = xval$DAPC$n.pca,
+             n.da = xval$DAPC$n.da)
 # # Save DAPC object
 # saveRDS(DAPC, file = "data/angsd_matrix/DAPC_wp1_final_sf7_sites.rds")
 

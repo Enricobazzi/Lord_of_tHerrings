@@ -216,12 +216,12 @@ if (length(args) == 3) {
   subset_samples_name <- args[2]
   sites_name <- args[3]
 } else {
-  all_samples_name <- "wp1_all"
+  all_samples_name <- "full_herr"
   # all_samples_name <- "vasa_ship"
-  subset_samples_name <- "wp1_final"
+  subset_samples_name <- "wp1_final_bal"
   # subset_samples_name <- "vasa_sub"
   # subset_samples_name <- "vasa_balticautumn"
-  sites_name <- "sf7_sites"
+  sites_name <- "supplementary_file_7.v2"
   # sites_name <- "chr12"
 }
 
@@ -257,6 +257,6 @@ ggsave(pca_plot,
   filename = paste0(
     "plots/angsd_matrix/", all_samples_name, ".", subset_samples_name, ".", sites_name, ".pdf"
     ),
-  width = 12, height = 10
+  width = 6, height = 5
 )
 
