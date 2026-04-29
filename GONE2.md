@@ -14,7 +14,7 @@ Downloaded [latest release](https://github.com/esrud/GONE2/releases/tag/v1.0.2) 
 
 To create a PED and MAP file for each population to be analyzed using plink, I first need to merge and filter the individual BCFs of the individuals of that population.
 
-The following populations will be analyzed:
+The following populations will be analyzed at first:
 - risor_2008 (n=8): MHER009, MHER010, MHER011, MHER012, MHER038, MHER039, MHER065, MHER066
 - maseskar_2003 (n=7): MHER013, MHER014, MHER015, MHER034, MHER035, MHER036, MHER037
 - idefjord_2010 (n=13): MHER022, MHER023, MHER024, MHER028, MHER029, MHER030, MHER044, MHER045, MHER046, MHER061, MHER062, MHER063, MHER064
@@ -29,7 +29,13 @@ The following populations will be analyzed:
 - foldfjorden_1875 (n=15): ND324, ND325, ND326, ND328, ND329, ND330, ND331, ND332, ND333, ND334, ND335, ND336, ND337, ND342, ND343
 - stavanger_1880 (n=10): ND178, ND180, ND182, ND183, ND184, ND187, ND188, ND319, ND320, ND321
 
-Files with list of individuals for each populations are in `data/GONE2/${pop}.sample_list.txt`
+After the DAPC results (see [dapc_v3.R](src/angsd_matrix/dapc_v3.R)), I decided to analyze these populations:
+
+- Modern Herring of Skagerrak and Kattegat (sk-mh, n=21): MHER009, MHER013, MHER014, MHER015, MHER022, MHER028, MHER029, MHER030, MHER034, MHER035, MHER036, MHER038, MHER039, MHER044, MHER045, MHER046, MHER061, MHER062, MHER063, MHER064, MHER065
+- Historical (non-Sillperiod) Herring of Skagerrak and Kattegat (sk-18rh, n=12): ND195, ND196, ND197, ND198, ND199, ND200, ND201, ND202, ND203, ND204, ND205, ND206
+
+
+Files with list of individuals for each populations are in `data/GONE2/input/${pop}.sample_list.txt`
 
 ### Merge individual BCFs into population BCF
 
@@ -46,10 +52,12 @@ pop=kampinge_1300
 pop=knastorp_600
 pop=foldfjorden_1875
 pop=stavanger_1880
+pop=sk-mh
+pop=sk-18rh
 
-for sample in $(cat data/GONE2/${pop}.sample_list.txt); do
+for sample in $(cat data/GONE2/input/${pop}.sample_list.txt); do
     echo data/bcfs/${sample}.step3.bcf
-done > data/GONE2/${pop}.bcf_list.txt
+done > data/GONE2/input/${pop}.bcf_list.txt
 
 sbatch \
     --job-name=${pop}_merge \
@@ -57,8 +65,8 @@ sbatch \
     --error=logs/GONE2/${pop}_merge.err \
     -t 0-18:00:00 \
     src/calling_and_filtering/merge_bcfs.sh \
-        data/GONE2/${pop}.bcf_list.txt \
-        data/GONE2/${pop}.bcf
+        data/GONE2/input/${pop}.bcf_list.txt \
+        data/GONE2/input/${pop}.bcf
 ```
 
 ### Get SNPs in chromosomes, remove high missing data and recode to PED/MAP
@@ -114,6 +122,24 @@ plink --recode \
  --extract data/GONE2/${pop}.lowmiss_snps.prune.in \
  --out data/GONE2/${pop}.lowmiss_snps
 ```
+
+### ALTERNATIVE INPUT VCF GENERATION
+
+```
+ml bcftools
+
+pop=sk-mh
+pop=sk-18rh
+
+bcftools view -Ou \
+    -m2 -M2 -v snps data/GONE2/input/${pop}.bcf | \
+bcftools view -Ou \
+    -t $(echo $(bcftools index -s data/GONE2/input/${pop}.bcf | cut -f1 | grep CM0 | grep -vE "CM079356.1|CM079362.1|CM079367.1|CM079373.1") | tr ' ' ',') | \
+bcftools view -Ov \
+    -i 'F_MISSING <= 0.15 & MAF > 0.05' \
+    -o data/GONE2/input/${pop}.lowmiss_snps.vcf
+```
+
 
 ## Run GONE2
 

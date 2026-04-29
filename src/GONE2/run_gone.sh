@@ -8,17 +8,19 @@
 
 pop=${1}
 i=${2}
-g=${3}
 
-if [ ! -f data/GONE2/${pop}.lowmiss_snps.ped ]; then
-    echo "Input PED file data/GONE2/${pop}.lowmiss_snps.ped not found!"
-    exit 1
-fi
-
-src/GONE2/GONE2-1.0.2/gone2 \
-    -t 3 \
-    -g ${g} \
+src/GONE2/gone2 \
+    -t 1 \
+    -x \
+    -g 0 \
     -r 2.54 \
-    -s 150000 \
+    -l 0.01 \
     -o data/GONE2/output/${pop}.${i} \
-    data/GONE2/${pop}.lowmiss_snps.ped
+    data/GONE2/input/${pop}.lowmiss_snps.vcf
+
+src/GONE2/currentNe2/currentne2 \
+    -t 1 \
+    -x \
+    -r 2.54 \
+    -o data/GONE2/output/${pop}.${i} \
+    data/GONE2/input/${pop}.lowmiss_snps.vcf
