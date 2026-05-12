@@ -31,8 +31,8 @@ The following populations will be analyzed at first:
 
 After the DAPC results (see [dapc_v3.R](src/angsd_matrix/dapc_v3.R)), I decided to analyze these populations:
 
-- Modern Herring of Skagerrak and Kattegat (sk-mh, n=21): MHER009, MHER013, MHER014, MHER015, MHER022, MHER028, MHER029, MHER030, MHER034, MHER035, MHER036, MHER038, MHER039, MHER044, MHER045, MHER046, MHER061, MHER062, MHER063, MHER064, MHER065
-- Historical (non-Sillperiod) Herring of Skagerrak and Kattegat (sk-18rh, n=12): ND195, ND196, ND197, ND198, ND199, ND200, ND201, ND202, ND203, ND204, ND205, ND206
+- Modern Herring of Skagerrak and Kattegat with P>0.99 (sk-mh, n=21): MHER009, MHER013, MHER014, MHER015, MHER022, MHER028, MHER029, MHER030, MHER034, MHER035, MHER036, MHER038, MHER039, MHER044, MHER045, MHER046, MHER061, MHER062, MHER063, MHER064, MHER065
+- Historical (non-Sillperiod) Herring of Skagerrak and Kattegat with P>0.99 (sk-18rh, n=12): ND195, ND196, ND197, ND198, ND199, ND200, ND201, ND202, ND203, ND204, ND205, ND206
 
 
 Files with list of individuals for each populations are in `data/GONE2/input/${pop}.sample_list.txt`
@@ -136,8 +136,13 @@ bcftools view -Ou \
 bcftools view -Ou \
     -t $(echo $(bcftools index -s data/GONE2/input/${pop}.bcf | cut -f1 | grep CM0 | grep -vE "CM079356.1|CM079362.1|CM079367.1|CM079373.1") | tr ' ' ',') | \
 bcftools view -Ov \
-    -i 'F_MISSING <= 0.15 & MAF > 0.05' \
+    -i 'F_MISSING < 0.2 & DP < 500' \
     -o data/GONE2/input/${pop}.lowmiss_snps.vcf
+
+# remove snps where ref = "N" (somehow present in v3)
+awk '$4 != "N"' data/GONE2/input/${pop}.lowmiss_snps.vcf > tmp && mv tmp data/GONE2/input/${pop}.lowmiss_snps.vcf
+
+grep "CM07935" data/GONE2/input/${pop}.lowmiss_snps.vcf > test.vcf
 ```
 
 

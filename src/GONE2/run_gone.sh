@@ -15,11 +15,13 @@ src/GONE2/gone2 \
     -g 0 \
     -r 2.54 \
     -l 0.01 \
+    -s 150000 \
     -o data/GONE2/output/${pop}.${i} \
     data/GONE2/input/${pop}.lowmiss_snps.vcf
 
 src/GONE2/currentNe2/currentne2 \
     -t 1 \
+    -s 150000 \
     -x \
     -r 2.54 \
     -o data/GONE2/output/${pop}.${i} \
