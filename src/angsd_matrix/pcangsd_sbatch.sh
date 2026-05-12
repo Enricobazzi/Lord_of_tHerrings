@@ -3,7 +3,7 @@
 #SBATCH -p shared
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH -t 0-12:00:00
+#SBATCH -t 0-10:00:00
 #SBATCH --mem=128G
 
 ml pcangsd
@@ -12,6 +12,7 @@ dataset=${1}
 sites=${2}
 
 pcangsd \
+    -t 8 \
     -b data/angsd_matrix/gtlike/${dataset}.beagle.gz \
     --iter 10000 \
     --filter-sites data/angsd_matrix/sites/${dataset}.${sites}.sitemask \
