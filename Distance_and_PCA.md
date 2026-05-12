@@ -238,6 +238,8 @@ ml bedtools
 
 dataset=full_herr
 sites=supplementary_file_7.v2
+sites=spring_v_autumn.v2
+sites=baltic_v_atlantic.v2
 
 # transform MAF to BED
 zcat data/angsd_matrix/gtlike/${dataset}.mafs.gz | cut -f1,2 | tail -n +2 | awk '{print $1, $2 - 1, $2}' | tr ' ' '\t' \
@@ -399,11 +401,15 @@ Use `--filter-sites` to only use variants in sitemask file
 ```
 ml pcangsd
 
-pcangsd \
-    -b data/angsd_matrix/gtlike/wp1_all.beagle.gz \
-    --iter 10000 \
-    --filter-sites data/angsd_matrix/sites/ns_inversions.chr12.sitemask \
-    -o data/angsd_matrix/pcangsd/wp1_all.chr12.pcangsd
+dataset=full_herr
+
+for sites in ns_inversions ns_inversions.chr6 ns_inversions.chr12 ns_inversions.chr17 ns_inversions.chr23; do
+    pcangsd \
+        -b data/angsd_matrix/gtlike/${dataset}.beagle.gz \
+        --iter 10000 \
+        --filter-sites data/angsd_matrix/sites/${dataset}.${sites}.sitemask \
+        -o data/angsd_matrix/pcangsd/${dataset}.${sites}.pcangsd
+done
 ```
 
 or sbatch:
@@ -431,4 +437,27 @@ for sites in supplementary_file_7.v2 ns_inversions ns_inversions.chr6 ns_inversi
     paste <(zcat ${beaglefile} | tail -n +2) <(cat ${sitemask}) | \
         awk '$NF == 1 {NF--; print}' >> ${dataset}.${sites}.filtered.beagle
 done
+```
+
+## OTHER ECOTYPES
+
+```
+dataset=full_herr
+sites=spring_v_autumn.v2
+sites=baltic_v_atlantic.v2
+
+# interactive:
+ml pcangsd
+pcangsd \
+    -b data/angsd_matrix/gtlike/${dataset}.beagle.gz \
+    --iter 10000 \
+    --filter-sites data/angsd_matrix/sites/${dataset}.${sites}.sitemask \
+    -o data/angsd_matrix/pcangsd/${dataset}.${sites}.pcangsd
+
+# or sbatch:
+sbatch \
+    --job-name=${dataset}.${sites}.pcangsd \
+    --output=logs/angsd_matrix/pcangsd.${dataset}.${sites}.out \
+    --error=logs/angsd_matrix/pcangsd.${dataset}.${sites}.err \
+    src/angsd_matrix/pcangsd_sbatch.sh ${dataset} ${sites}
 ```

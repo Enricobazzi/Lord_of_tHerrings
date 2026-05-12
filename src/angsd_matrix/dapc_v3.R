@@ -60,8 +60,6 @@ get_group_names <- function(df) {
 }
 
 ## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
-## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
-## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
 ## VARIABLES/ARGUMENTS:
 
 # dataset of full matrix generated with PCangsd
@@ -189,14 +187,120 @@ for (p in unique(dapc_df$period)) {
     }
   }
 }
-
-## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
-## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
 ## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
 ## BONUS SHIT:
 ## to get datasets for GONE2:
+# sk_mh <- dapc_df |> filter(X2 > 0.99, region == "Skagerrak_&_Kattegat", period == "mh")
+# print(rownames(sk_mh))
+# sk_18rh <- dapc_df |> filter(X2 > 0.99, region == "Skagerrak_&_Kattegat", period == "18rh")
+# print(rownames(sk_18rh))
 
-sk_mh <- dapc_df |> filter(X2 > 0.99, region == "Skagerrak_&_Kattegat", period == "mh")
-print(rownames(sk_mh))
-sk_18rh <- dapc_df |> filter(X2 > 0.99, region == "Skagerrak_&_Kattegat", period == "18rh")
-print(rownames(sk_18rh))
+
+## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
+## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
+## ---------- ## ---------- ## ---------- ## ---------- ## ---------- ## -------
+
+# dataset of full matrix generated with PCangsd
+pcangsd_dataset <- "full_herr"
+# dataset of samples to be analyzed in DAPC
+dapc_dataset <- "wp1_final_bal"
+# name of sites
+sites_name <- "ns_inversions.chr12"
+sites_name <- "baltic_v_atlantic.v2"
+sites_name <- "spring_v_autumn.v2"
+# number of clusters (k)
+k <- 3
+
+# samples
+samples <- get_samples_from_dataset(dapc_dataset)
+# matrix
+matrix <- get_matrix(pcangsd_dataset, sites_name, dapc_dataset)
+# metadata
+metadata <- get_metadata(samples)
+# sample ids
+sample_ids <- get_sample_ids(metadata, samples)
+
+## DAPC
+grp <- find.clusters(matrix, n.pca = 3, n.clust = k)
+# grp <- find.clusters(matrix, n.pca = 3, choose.n.clust = F, criterion = "diffNgroup")
+# usually k = 7 with this method
+candidate_grps <- grp$grp
+xval <- xvalDapc(matrix, candidate_grps, n.pca.max = 100,
+                 result = "groupMean",
+                 n.pca = 3, n.rep = 100, xval.plot = FALSE)
+# n.pca and n.da chosen based on xval results (10 and 4)
+DAPC <- dapc(matrix, candidate_grps,
+             n.pca = xval$DAPC$n.pca,
+             n.da = xval$DAPC$n.da)
+# DAPC <- dapc(matrix, candidate_grps,
+#              n.pca = xval$DAPC$n.pca,
+#              n.da = 1)
+# scatter(DAPC)
+# # Save DAPC object
+# saveRDS(DAPC, file = paste0("data/angsd_matrix/DAPC.", pcangsd_dataset, ".", dapc_dataset, ".", sites_name, ".k", k, ".rds"))
+# # Load the DAPC object
+# DAPC <- readRDS(paste0("data/angsd_matrix/DAPC.", pcangsd_dataset, ".", dapc_dataset, ".", sites_name, ".k", k, ".rds"))
+
+# biplot of dapc - prepare data frame:
+dapc_df <- data.frame(DAPC$ind.coord)
+dapc_df$sample_id <- sample_ids
+dapc_df$region <- metadata$region
+dapc_df$period <- metadata$period
+
+# add posterior probability for groups to dapc_df
+post <- data.frame(DAPC$posterior)
+# transform number to group name
+# colnames(post) <- paste0("W", colnames(post))
+dapc_df <- cbind(dapc_df, post)
+# group
+dapc_df$group <- DAPC$assign
+# dapc_df$groupname <- get_group_names(dapc_df)
+scatter(DAPC)
+# 
+ggplot(
+  data = dapc_df,
+  aes(x = LD1, y = LD2, fill = region, shape = period)
+) +
+  geom_point(size = 3) +
+  scale_fill_manual(values = c(
+    "North_Atlantic" = "#1b639e",
+    "Norway" = "#02d97c",
+    "Skagerrak_&_Kattegat" = "#b370b2",
+    "North_Sea" = "#e73f29",
+    "Britain_&_Ireland" = "#a6721e",
+    "BALTIC" = "#440154FF",
+    "Other" = "#7a7a7a"
+  )) +
+  scale_shape_manual(values= c(
+    "mh" = 23,
+    "17sp" = 25,
+    "18sp" = 24,
+    "18rh" = 22,
+    "ah" = 21
+  )) +
+  theme_minimal()
+
+ggplot(
+  data = dapc_df,
+  aes(x = LD1, color = region, fill = region)
+) +
+  geom_density(alpha = 0.5, bw = 0.5) +
+  scale_color_manual(values = c(
+    "North_Atlantic" = "#1b639e",
+    "Norway" = "#02d97c",
+    "Skagerrak_&_Kattegat" = "#b370b2",
+    "North_Sea" = "#e73f29",
+    "Britain_&_Ireland" = "#a6721e",
+    "BALTIC" = "#440154FF",
+    "Other" = "#7a7a7a"
+  )) +
+  scale_fill_manual(values = c(
+    "North_Atlantic" = "#1b639e",
+    "Norway" = "#02d97c",
+    "Skagerrak_&_Kattegat" = "#b370b2",
+    "North_Sea" = "#e73f29",
+    "Britain_&_Ireland" = "#a6721e",
+    "BALTIC" = "#440154FF",
+    "Other" = "#7a7a7a"
+  )) +
+  theme_minimal()

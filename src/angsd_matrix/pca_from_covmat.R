@@ -199,9 +199,9 @@ read_arguments <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   if (length(args) != 3) {
     "running with default arguments:
-    all_samples_name <- 'wp1_all'
-    subset_samples_name <- 'wp1_final'
-    sites_name <- 'sf7_sites'"
+    all_samples_name <- 'full_herr'
+    subset_samples_name <- 'wp1_final_bal'
+    sites_name <- 'spring_v_autumn.v2'"
   } else if (length(args) == 3) {
     "running with user provided arguments"
   } else if (length(args) > 3) {
@@ -221,9 +221,18 @@ if (length(args) == 3) {
   subset_samples_name <- "wp1_final_bal"
   # subset_samples_name <- "vasa_sub"
   # subset_samples_name <- "vasa_balticautumn"
-  sites_name <- "supplementary_file_7.v2"
+  sites_name <- "spring_v_autumn.v2"
   # sites_name <- "chr12"
 }
+
+# # dataset of full matrix generated with PCangsd
+# all_samples_name <- "full_herr"
+# # dataset of samples to be analyzed in DAPC
+# subset_samples_name <- "wp1_final_bal"
+# # name of sites
+# sites_name <- "ns_inversions.chr12"
+# sites_name <- "baltic_v_atlantic.v2"
+# sites_name <- "spring_v_autumn.v2"
 
 all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
 subset_samples_file <- paste0("data/angsd_matrix/bamlists/", subset_samples_name, ".sample_list.txt")
