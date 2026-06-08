@@ -1,0 +1,288 @@
+sample,id,Period,Year,x,y,GeneticGroup,SpawnTime,Stock
+201450544,faroe_1,mh,2014,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201450545,faroe_2,mh,2014,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201550141,faroe_3,mh,2015,-7.03463,61.88078,North Sea,Autumn,North Sea Autumn-Spawner
+201550142,faroe_4,mh,2015,-7.03463,61.88078,North Sea,Autumn,North Sea Autumn-Spawner
+201550143,faroe_5,mh,2015,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201550145,faroe_6,mh,2015,-7.03463,61.88078,North Sea,Autumn,North Sea Autumn-Spawner
+201550147,faroe_7,mh,2015,-7.03463,61.88078,North Sea,Autumn,North Sea Autumn-Spawner
+201550149,faroe_8,mh,2015,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201550562,norwegian_1,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550563,norwegian_2,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550564,norwegian_3,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550565,norwegian_4,mh,2015,-1.84517,64.51262,North Atlantic,Spring,North Atlantic Spring-Spawner
+201550566,norwegian_5,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550567,norwegian_6,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550568,norwegian_7,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201550569,norwegian_8,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+201604591,faroe_9,mh,2016,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201650792,northsea_1,mh,2016,1.64507,59.81814,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+201650793,northsea_2,mh,2016,1.64507,59.81814,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+201650794,northsea_3,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+201650795,northsea_4,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+201650796,northsea_5,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+201650797,northsea_6,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+201650798,northsea_7,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+201650799,northsea_8,mh,2016,1.64507,59.81814,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+201750143,faroe_10,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750144,faroe_11,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750145,faroe_12,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750146,faroe_13,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750147,faroe_14,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750149,faroe_15,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750153,faroe_16,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750154,faroe_17,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750155,faroe_18,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750157,faroe_19,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750158,faroe_20,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750159,faroe_21,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750201,iceland_1,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750202,iceland_2,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750203,iceland_3,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750204,iceland_4,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750205,iceland_5,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750206,iceland_6,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750207,iceland_7,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750212,iceland_8,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750214,iceland_9,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750215,iceland_10,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750216,iceland_11,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750217,iceland_12,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750218,iceland_13,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750219,iceland_14,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750221,iceland_15,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750222,iceland_16,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750223,iceland_17,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750224,iceland_18,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750225,iceland_19,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750226,iceland_20,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750227,iceland_21,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750228,iceland_22,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750231,iceland_23,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750232,iceland_24,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750233,iceland_25,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750234,iceland_26,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750235,iceland_27,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750236,iceland_28,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750237,iceland_29,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+201750238,iceland_30,mh,2017,-19.09193,63.06307,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+1552004523,norwegian_9,mh,2015,-1.84517,64.51262,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+1552004524,norwegian_10,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552004526,norwegian_11,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552004722,norwegian_12,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552004723,norwegian_13,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552004724,norwegian_14,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005123,norwegian_15,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005124,norwegian_16,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005125,norwegian_17,mh,2015,-1.84517,64.51262,North Atlantic,Spring,North Atlantic Spring-Spawner
+1552005524,norwegian_18,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005525,norwegian_19,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005923,norwegian_20,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552005924,norwegian_21,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552006326,norwegian_22,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+1552006327,norwegian_23,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015501410,faroe_22,mh,2015,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+2015501411,faroe_23,mh,2015,-7.03463,61.88078,North Sea,Autumn,North Sea Autumn-Spawner
+2015505610,norwegian_24,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015505612,norwegian_25,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015505613,norwegian_26,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015505622,norwegian_27,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015505623,norwegian_28,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2015505624,norwegian_29,mh,2015,-1.84517,64.51262,Norwegian,Spring,Norwegian Spring-Spawner
+2016507910,northsea_9,mh,2016,1.64507,59.81814,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+2016507911,northsea_10,mh,2016,1.64507,59.81814,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+2016507912,northsea_11,mh,2016,1.64507,59.81814,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+2016507913,northsea_12,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+2016507915,northsea_13,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+2016507916,northsea_14,mh,2016,1.64507,59.81814,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+2016507918,northsea_15,mh,2016,1.64507,59.81814,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+2016507919,northsea_16,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+2016507920,northsea_17,mh,2016,1.64507,59.81814,North Sea,Autumn,North Sea Autumn-Spawner
+2017501410,faroe_24,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+2017501411,faroe_25,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+2017501414,faroe_26,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+2017501510,faroe_27,mh,2017,-7.03463,61.88078,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+AAL1,celtic_1,mh,2015,-6.85,51.983333333333300,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+AAL2,celtic_2,mh,2015,-6.85,51.983333333333300,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+AAL3,celtic_3,mh,2015,-6.85,51.983333333333300,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+AF29,norwegian_30,mh,2013,4.658203,61.185625,Norwegian,Spring,Norwegian Spring-Spawner
+AF30,norwegian_31,mh,2013,4.658203,61.185625,Baltic,Spring,Baltic Spring-Spawner
+AF31,norwegian_32,mh,2013,4.658203,61.185625,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+AF8,norwegian_33,mh,2013,4.658203,61.185625,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+AK1,downs_1,mh,2016,2.5,51.56666666666670,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+AK2,downs_2,mh,2016,2.5,51.56666666666670,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+AK3,downs_3,mh,2016,2.5,51.56666666666670,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+AM27,norwegian_34,mh,1980,10.25,64.866667,Norwegian,Spring,Norwegian Spring-Spawner
+AM29,norwegian_35,mh,1980,10.25,64.866667,Norwegian,Spring,Norwegian Spring-Spawner
+AM33,norwegian_36,mh,1980,10.25,64.866667,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+AM8,norwegian_37,mh,1980,10.25,64.866667,Norwegian,Spring,Norwegian Spring-Spawner
+BF16,hastkar_1,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BF18,hastkar_2,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BF19,hastkar_3,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BF21,hastkar_4,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BM14,hastkar_5,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BM15,hastkar_6,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BM16,hastkar_7,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+BM19,hastkar_8,mh,2013,17.739702,60.532414,Baltic,Spring,Baltic Spring-Spawner
+Fehmarn3,fehmarn_4,mh,1979,11.5,54.833333333333300,Baltic,Autumn,Baltic Autumn-Spawner
+Fehmarn44,fehmarn_5,mh,1979,11.5,54.833333333333300,Baltic,Autumn,Baltic Autumn-Spawner
+Fehmarn6,fehmarn_6,mh,1979,11.5,54.833333333333300,Skagerrak & Kattegat,Autumn,Baltic Autumn-Spawner
+Gavle100,gavle_4,mh,2012,17.58333,60.73333,Baltic,Autumn,Baltic Autumn-Spawner
+Gavle54,gavle_5,mh,2012,17.58333,60.73333,Skagerrak & Kattegat,Autumn,Baltic Autumn-Spawner
+Gavle98,gavle_6,mh,2012,17.58333,60.73333,Baltic,Autumn,Baltic Autumn-Spawner
+HER065,netherlands_7,ah,1400,3.66354,51.54794,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER067,netherlands_8,ah,1400,3.66354,51.54794,North Sea,Autumn,North Sea Autumn-Spawner
+HER102,york_1,ah,1100,-1.07391,53.96142,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER104,york_2,ah,1100,-1.07391,53.96142,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER106,york_4,ah,955,-1.07391,53.96142,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER109,york_5,ah,955,-1.07391,53.96142,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER124,york_8,ah,1300,-1.07391,53.96142,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER127,york_9,ah,1300,-1.07391,53.96142,North Sea,Autumn,North Sea Autumn-Spawner
+HER132,lyminge_3,ah,800,1.08968,51.12899,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+HER133,lyminge_4,ah,800,1.08968,51.12899,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+HER134,lyminge_5,ah,800,1.08968,51.12899,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+MHER001,karmoy_1,mh,2002,5.20294,59.30354,Norwegian,Spring,Norwegian Spring-Spawner
+MHER002,karmoy_2,mh,2002,5.20294,59.30354,Norwegian,Spring,Norwegian Spring-Spawner
+MHER003,karmoy_3,mh,2002,5.20294,59.30354,Norwegian,Spring,Norwegian Spring-Spawner
+MHER005,more_1,mh,2002,7.00714,62.84068,Norwegian,Spring,Norwegian Spring-Spawner
+MHER006,more_2,mh,2002,7.00714,62.84068,Norwegian,Spring,Norwegian Spring-Spawner
+MHER007,more_3,mh,2002,7.00714,62.84068,Norwegian,Spring,Norwegian Spring-Spawner
+MHER008,more_4,mh,2002,7.00714,62.84068,Norwegian,Spring,Norwegian Spring-Spawner
+MHER009,risor_1,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER010,risor_2,mh,2003,9.23274,58.7203,Norwegian,Spring,Norwegian Spring-Spawner
+MHER011,risor_3,mh,2003,9.23274,58.7203,Norwegian,Spring,Norwegian Spring-Spawner
+MHER012,risor_4,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER013,maseskar_1,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER014,maseskar_2,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER015,maseskar_3,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER016,kalix_1,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER017,kalix_2,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER018,kalix_3,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER019,kalmarsund_1,mh,2010,16.33068,56.59106,Baltic,Spring,Baltic Spring-Spawner
+MHER020,kalmarsund_2,mh,2010,16.33068,56.59106,Baltic,Spring,Baltic Spring-Spawner
+MHER021,kalmarsund_3,mh,2010,16.33068,56.59106,Baltic,Spring,Baltic Spring-Spawner
+MHER022,idefjord_1,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER023,idefjord_2,mh,2010,11.38076,59.07217,Baltic,Spring,Baltic Spring-Spawner
+MHER024,idefjord_3,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER025,blekinge_1,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER026,blekinge_2,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER027,blekinge_3,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER028,idefjord_4,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER029,idefjord_5,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER030,idefjord_6,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER034,maseskar_4,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER035,maseskar_5,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER036,maseskar_6,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER037,maseskar_7,mh,2003,11.32181,58.09425,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER038,risor_5,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER039,risor_6,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER044,idefjord_7,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER045,idefjord_8,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER046,idefjord_9,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER052,kalmarsund_4,mh,2010,16.33068,56.59106,Baltic,Spring,Baltic Spring-Spawner
+MHER053,karmoy_4,mh,2002,5.20294,59.30354,Norwegian,Spring,Norwegian Spring-Spawner
+MHER054,kalix_4,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER055,kalix_5,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER056,kalix_6,mh,2002,23.30565,65.76593,Baltic,Spring,Baltic Spring-Spawner
+MHER057,blekinge_4,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER058,blekinge_5,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER059,blekinge_6,mh,2010,15.33585,56.11257,Baltic,Spring,Baltic Spring-Spawner
+MHER061,idefjord_10,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER062,idefjord_11,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER063,idefjord_12,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER064,idefjord_13,mh,2010,11.38076,59.07217,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER065,risor_7,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+MHER066,risor_8,mh,2003,9.23274,58.7203,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND001,gullholmen_1,17sp,1750,11.40086,58.18524,North Atlantic,Autumn,North Atlantic Autumn-Spawner
+ND006,gullholmen_2,17sp,1750,11.40086,58.18524,North Sea,Autumn,North Sea Autumn-Spawner
+ND009,gullholmen_3,17sp,1750,11.40086,58.18524,North Sea,Autumn,North Sea Autumn-Spawner
+ND010,gullholmen_4,17sp,1750,11.40086,58.18524,North Sea,Autumn,North Sea Autumn-Spawner
+ND011,gullholmen_5,17sp,1750,11.40086,58.18524,North Sea,Autumn,North Sea Autumn-Spawner
+ND021,kalvsund_1,18sp,1880,11.68775,57.70265,North Sea,Autumn,North Sea Autumn-Spawner
+ND022,koster_1,18sp,1881,11.02689,58.90114,North Sea,Autumn,North Sea Autumn-Spawner
+ND023,koster_2,18sp,1897,11.02689,58.90114,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND024,koster_3,18sp,1897,11.02689,58.90114,Norwegian,Spring,Norwegian Spring-Spawner
+ND026,koster_4,18sp,1898,11.02689,58.90114,Norwegian,Spring,Norwegian Spring-Spawner
+ND028,scotland_1,18sp,1900,-4.29295,56.61952,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND029,scotland_2,18sp,1900,-4.29295,56.61952,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND030,haugesund_1,18sp,1900,5.246043,59.4257685,Norwegian,Spring,Norwegian Spring-Spawner
+ND031,haugesund_2,18sp,1900,5.246043,59.4257685,Norwegian,Spring,Norwegian Spring-Spawner
+ND034,kalvsund_2,18sp,1880,11.68775,57.70265,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND036,kalvsund_3,18sp,1881,11.68775,57.70265,Norwegian,Spring,Norwegian Spring-Spawner
+ND038,scotland_3,18sp,1900,-4.29295,56.61952,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND039,scotland_4,18sp,1900,-4.29295,56.61952,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND040,haugesund_3,18sp,1900,5.246043,59.4257685,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND142,scotland_5,18rh,1848,-3.2609567,56.0377475,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+ND157,scotland_6,18sp,1890,-4.9254889,55.7449326,Skagerrak & Kattegat,Autumn,Baltic Autumn-Spawner
+ND158,scotland_7,18sp,1890,-5.605374,55.424117,Britain & Ireland,Spring,Ireland & Britain Spring-Spawner
+ND161,rovaer_1,18sp,1881,5.108007,59.4392627,Norwegian,Spring,Norwegian Spring-Spawner
+ND163,bergen_1,18rh,NA,5.1050624,60.4102617,Norwegian,Spring,Norwegian Spring-Spawner
+ND164,bergen_2,18rh,NA,5.1050624,60.4102617,Norwegian,Spring,Norwegian Spring-Spawner
+ND165,bergen_3,18rh,NA,5.1050624,60.4102617,Norwegian,Spring,Norwegian Spring-Spawner
+ND166,bergen_4,18rh,NA,5.1050624,60.4102617,Norwegian,Spring,Norwegian Spring-Spawner
+ND167,bergen_5,18rh,NA,5.1050624,60.4102617,Norwegian,Spring,Norwegian Spring-Spawner
+ND168,unknown_1,18rh,NA,8.06712,60.33619,Norwegian,Spring,Norwegian Spring-Spawner
+ND169,unknown_2,18rh,1870,8.06712,60.33619,Norwegian,Spring,Norwegian Spring-Spawner
+ND170,unknown_3,18rh,1870,8.06712,60.33619,Norwegian,Spring,Norwegian Spring-Spawner
+ND171,unknown_4,18rh,1870,8.06712,60.33619,Norwegian,Spring,Norwegian Spring-Spawner
+ND178,stavanger_1,18sp,1880,5.5573408,59.0011071,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND180,stavanger_2,18sp,1880,5.5573408,59.0011071,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND182,stavanger_3,18sp,1880,5.5573408,59.0011071,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND183,stavanger_4,18sp,1880,5.5573408,59.0011071,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND184,stavanger_5,18sp,1880,5.5573408,59.0011071,Norwegian,Spring,Norwegian Spring-Spawner
+ND187,stavanger_6,18sp,1880,5.5573408,59.0011071,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+ND188,stavanger_7,18sp,1880,5.5573408,59.0011071,Norwegian,Spring,Norwegian Spring-Spawner
+ND195,dynekilen_1,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND196,dynekilen_2,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND197,dynekilen_3,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND198,dynekilen_4,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND199,dynekilen_5,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND200,dynekilen_6,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND201,dynekilen_7,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND202,dynekilen_8,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND203,dynekilen_9,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND204,dynekilen_10,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND205,dynekilen_11,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND206,dynekilen_12,18rh,1874,11.2220227,59.0076925,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND319,stavanger_8,18rh,1872,5.5573408,59.0011071,North Sea,Autumn,North Sea Autumn-Spawner
+ND320,stavanger_9,18rh,1872,5.5573408,59.0011071,North Sea,Autumn,North Sea Autumn-Spawner
+ND321,stavanger_10,18rh,1872,5.5573408,59.0011071,Norwegian,Spring,Norwegian Spring-Spawner
+ND322,haugesund_4,18rh,1873,5.246043,59.4257685,Norwegian,Spring,Norwegian Spring-Spawner
+ND323,haugesund_5,18rh,1873,5.246043,59.4257685,Norwegian,Spring,Norwegian Spring-Spawner
+ND324,foldfjorden_1,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND325,foldfjorden_2,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND326,foldfjorden_3,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND328,foldfjorden_4,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND329,foldfjorden_5,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND330,foldfjorden_6,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND331,foldfjorden_7,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND332,foldfjorden_8,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND333,foldfjorden_9,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND334,foldfjorden_10,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND335,foldfjorden_11,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND336,foldfjorden_12,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND337,foldfjorden_13,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND342,foldfjorden_14,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND343,foldfjorden_15,18rh,1875,8.3968739,63.2619041,Norwegian,Spring,Norwegian Spring-Spawner
+ND440,nyalodose_1,ah,1500,12.1562058,58.0327409,Skagerrak & Kattegat,Spring,Skagerrak & Kattegat Spring-Spawner
+ND443,masthugget_1,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND448,masthugget_2,17sp,1740,11.9470565,57.6965823,Norwegian,Spring,Norwegian Spring-Spawner
+ND450,masthugget_3,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND454,masthugget_4,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND455,masthugget_5,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND456,masthugget_6,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND459,norway_1,18sp,1883,9.6931,61.86495,North Sea,Autumn,North Sea Autumn-Spawner
+ND460,norway_2,18sp,1883,9.6931,61.86495,North Sea,Autumn,North Sea Autumn-Spawner
+ND461,norway_3,18sp,1882,9.6931,61.86495,North Sea,Spring,North Sea Spring-Spawner
+ND463,norway_4,18sp,1883,9.6931,61.86495,Norwegian,Spring,Norwegian Spring-Spawner
+ND464,masthugget_7,17sp,1740,11.9470565,57.6965823,North Sea,Autumn,North Sea Autumn-Spawner
+ND467,masthugget_8,17sp,1740,11.9470565,57.6965823,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+NorthSea13,northsea_18,mh,1979,6.166666666666670,58.1,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+NorthSea19,northsea_19,mh,1979,6.166666666666670,58.1,North Sea,Autumn,North Sea Autumn-Spawner
+NorthSea34,northsea_20,mh,1979,6.166666666666670,58.1,North Sea,Autumn,North Sea Autumn-Spawner
+NSSH33,norwegian_38,mh,2017,9.78333,67.76666,Norwegian,Spring,Norwegian Spring-Spawner
+NSSH34,norwegian_39,mh,2017,9.78333,67.76666,Norwegian,Spring,Norwegian Spring-Spawner
+NSSH36,norwegian_40,mh,2017,9.78333,67.76666,Norwegian,Spring,Norwegian Spring-Spawner
+Z12,isleofman_1,mh,2015,-4.616666666666670,54.1,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+Z14,isleofman_2,mh,2015,-4.616666666666670,54.1,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
+Z4,isleofman_3,mh,2015,-4.616666666666670,54.1,Britain & Ireland,Autumn,Ireland & Britain Autumn-Spawner
