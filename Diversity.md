@@ -65,6 +65,13 @@ grep -i "sillperioder" data/samples_table.csv | grep -iE "koster|kalvsund" | \
 # modern herring (sk-mh)
 grep -i "modern" data/samples_table.csv | grep -iE "idefjord|maseskar|risor" | \
     cut -d',' -f1 > data/diversity/bamlists/sk-mh.sample_list.txt
+# or:
+for pe in 17sp 18rh 18sp mh; do
+    grep "yes" ../Silly-Periods/data/samples_table.csv | \
+        grep "Skag" | grep "${pe}" | cut -d',' -f1 \
+        > data/bamlists/sk-${pe}.sample_list.txt
+done
+
 
 #### NORTH SEA (NS)
 
@@ -84,24 +91,50 @@ grep -i "sillperioder" data/samples_table.csv | grep -iE "stavanger|haugesund|ro
 grep -i "modern" data/samples_table.csv | grep -iE "northsea|celtic|downs|isleofman|karmoy" | \
     grep -v "Lamich" | \
     cut -d',' -f1 > data/diversity/bamlists/ns-mh.sample_list.txt
+# or:
+for pe in mh; do
+    grep "yes" ../Silly-Periods/data/samples_table.csv | \
+        grep "North_Sea" | grep "${pe}" | cut -d',' -f1 \
+        > data/bamlists/ns-${pe}.sample_list.txt
+done
+ 
+
+#### IRELAND & BRITAIN
+for pe in 18sp mh; do
+    grep "yes" ../Silly-Periods/data/samples_table.csv | \
+        grep "Britain" | grep "${pe}" | cut -d',' -f1 \
+        > data/bamlists/bi-${pe}.sample_list.txt
+done
+
+#### NORWAY
+for pe in 18rh 18sp mh; do
+    grep "yes" ../Silly-Periods/data/samples_table.csv | \
+        grep "Norway" | grep "${pe}" | cut -d',' -f1 \
+        > data/bamlists/no-${pe}.sample_list.txt
+done
+
+
 
 ```
 
 ### GENERATE BAMLISTS
 
 ```
-for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
-    for sample in $(cat data/diversity/bamlists/${dataset}.sample_list.txt); do
-        input_bam=data/diversity/bams/${sample}.subsampled_3X.noreps_noinvs.bam
+# for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+for dataset in bi-18sp bi-mh no-18rh no-18sp no-mh ns-mh sk-17sp sk-18rh sk-18sp sk-mh; do
+    for sample in $(cat data/bamlists/${dataset}.sample_list.txt); do
+        input_bam=data/bams/${sample}.subsampled_3X.noreps_noinvs.bam
         echo ${input_bam}
-    done > data/diversity/bamlists/${dataset}.bamlist
+    done > data/bamlists/${dataset}.bamlist
 done
 ```
 
 ### ANGSD DO SAF (LIKELIHOOD)
 
 ```
-for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+# for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+for dataset in bi-18sp bi-mh no-18rh no-18sp no-mh ns-mh sk-17sp sk-18rh sk-18sp sk-mh; do
+    ls data/bamlists/${dataset}.bamlist
     sbatch \
         --job-name=${dataset}.dosaflike \
         --output=logs/diversity/dosaflike.${dataset}.out \

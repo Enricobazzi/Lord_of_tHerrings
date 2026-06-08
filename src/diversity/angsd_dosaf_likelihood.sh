@@ -11,14 +11,14 @@ ml angsd
 
 # constants
 THREADS=8
-REF=/cfs/klemming/projects/supr/naiss2024-6-170/analyses/Herring/Enrico/Reference/GCF_900700415.2_Ch_v2.0.2_genomic.fna
+REF=Reference/GCF_900700415.2_Ch_v2.0.2_genomic.fna
 OUT=data/diversity/output
 
 # arg
 dataset=${1}
 
 # vars
-bamlist=data/diversity/bamlists/${dataset}.bamlist
+bamlist=data/bamlists/${dataset}.bamlist
 n_ind=$(wc -l < $bamlist)
 min_ind=$((n_ind / 2))
 maxD=$((n_ind * 3 * 5))

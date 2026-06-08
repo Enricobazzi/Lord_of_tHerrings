@@ -88,11 +88,59 @@ for (sea in c("sk", "ns")) {
 ####
 
 datasets <- c("sk-17sp", "sk-18rh", "sk-18sp", "sk-mh", "ns-ah", "ns-18rh", "ns-18sp", "ns-mh")
-dataset <- datasets[4]
+datasets <- c("sk-17sp", "sk-18rh", "sk-18sp", "sk-mh")
+
 for (dataset in datasets){
   aa <- read.table(paste0("data/diversity/output/", dataset, ".folded.thetas.W10000.S5000.pestPG"),
                    comment.char = "", header = T)
   print(dataset)
   # print(mean(aa$tP/aa$nSites, na.rm =T))
-  print(exp(mean(log(aa$tP/aa$nSites), na.rm = T)))
+  # print(exp(mean(log(aa$tP/aa$nSites), na.rm = T)))
+  print(exp(weighted.mean(log(aa$tP / aa$nSites), w = aa$nSites, na.rm = TRUE)))
+  # print(sum(aa$tP, na.rm = TRUE) / sum(aa$nSites, na.rm = TRUE))
+  print(exp(weighted.mean(log(aa$tW / aa$nSites), w = aa$nSites, na.rm = TRUE)))
+  # print(sum(aa$tW, na.rm = TRUE) / sum(aa$nSites, na.rm = TRUE))
+  # print(weighted.mean(aa$Tajima, w = aa$nSites, na.rm = TRUE))
 }
+
+####
+
+dataset <- "wp1_final_bal"
+
+# get sample names for a dataset from the sample_list file:
+get_samples_from_dataset <- function(dataset) {
+  file_path <- paste0("data/angsd_matrix/bamlists/", dataset, ".sample_list.txt")
+  samples <- read.table(file_path)[, 1] |> as.character()
+  return (samples)
+}
+
+# get metadata table
+get_metadata <- function(dataset) {
+  samples <- get_samples_from_dataset(dataset)
+  sample_data_file <- "~/Documents/Silly-periods/data/samples_table.csv"
+  sample_data <- read.table(sample_data_file, sep = ",",
+                            header = TRUE, na.strings = "UNKNOWN")
+  sample_data <- sample_data[sample_data$sample_id %in% samples, ]
+  return (sample_data)
+}
+
+# get sample het
+get_het <- function(sample) {
+  # from https://www.popgen.dk/angsd/index.php/Heterozygosity
+  a <- scan(paste0("data/diversity/output/", sample, ".het_notrans.ml"))
+  return (a[2] / sum(a))
+}
+
+samples <- get_samples_from_dataset(dataset)
+metadata <- get_metadata(dataset)
+
+het_df <- data.frame(
+  ID = metadata$new.id,
+  Sample = metadata$sample_id,
+  Region = metadata$region,
+  Period = metadata$period,
+  Year = metadata$year,
+  Heterozygosity = unlist(lapply(metadata$sample_id, get_het))
+)
+z <- het_df |> filter(Region == "Skagerrak_&_Kattegat", Period == "mh")
+print(mean(z$Heterozygosity))
