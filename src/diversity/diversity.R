@@ -105,6 +105,9 @@ for (dataset in datasets){
 
 ####
 
+library(tidyverse)
+
+pcangsd_dataset <- "full_herr"
 dataset <- "wp1_final_bal"
 
 # get sample names for a dataset from the sample_list file:
@@ -131,6 +134,21 @@ get_het <- function(sample) {
   return (a[2] / sum(a))
 }
 
+# get stock dataframe
+get_stock_df <- function(pcangsd_dataset, dataset) {
+  return (
+    read.table(paste0("data/angsd_matrix/dapc/stocks_table.",
+                      pcangsd_dataset, ".", dataset, ".csv"),
+               sep = ",", header = T)
+    )
+}
+
+# get sample stock 
+get_sample_stock <- function(sample, stock_df){
+  stock <- stock_df$Stock[which(stock_df$sample == sample)]
+  return (stock)
+}
+
 samples <- get_samples_from_dataset(dataset)
 metadata <- get_metadata(dataset)
 
@@ -140,7 +158,26 @@ het_df <- data.frame(
   Region = metadata$region,
   Period = metadata$period,
   Year = metadata$year,
+  Stock = sapply(metadata$sample_id, get_sample_stock,
+                 stock_df = get_stock_df(pcangsd_dataset, dataset),
+                 USE.NAMES = FALSE),
   Heterozygosity = unlist(lapply(metadata$sample_id, get_het))
 )
-z <- het_df |> filter(Region == "Skagerrak_&_Kattegat", Period == "mh")
-print(mean(z$Heterozygosity))
+stock <- "Skagerrak & Kattegat Spring-Spawner"
+stock <- "Norwegian Spring-Spawner"
+stock <- "North Sea Autumn-Spawner"
+stock <- "Ireland & Britain Autumn-Spawner"
+z <- het_df |> filter(Stock == stock)
+for (period in c("17sp", "18rh", "18sp", "mh")){
+  print(paste(stock, period))
+  zz <- z |> filter(Period == period)
+  print(mean(zz$Heterozygosity))
+}
+
+region <- "North_Sea"
+z <- het_df |> filter(Region == region)
+for (period in c("mh")){
+  print(paste(region, period))
+  zz <- z |> filter(Period == period)
+  print(mean(zz$Heterozygosity))
+}

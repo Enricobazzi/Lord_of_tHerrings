@@ -146,19 +146,40 @@ done
 ### REALSFS
 
 ```
-for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+# for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+for dataset in bi-18sp bi-mh no-18rh no-18sp no-mh ns-mh sk-17sp sk-18rh sk-18sp sk-mh; do
     sbatch \
         --job-name=${dataset}.realsfs \
         --output=logs/diversity/realsfs.${dataset}.out \
         --error=logs/diversity/realsfs.${dataset}.err \
         src/diversity/run_realsfs.sh ${dataset}
 done
+
+for dataset in no-mh; do
+    sbatch -t 1-08:00:00 \
+        --job-name=${dataset}.realsfs \
+        --output=logs/diversity/realsfs.${dataset}.out \
+        --error=logs/diversity/realsfs.${dataset}.err \
+        src/diversity/run_realsfs.sh ${dataset}
+done
+
+# alternative winsfs
+OUT=data/diversity/output
+dataset=sk-mh
+saf=${OUT}/${dataset}.folded.saf.idx
+sfs=${OUT}/${dataset}.folded.sfs
+winsfs shuffle --output ${saf}.shuf ${saf}
+winsfs ${saf}.shuf > ${sfs}
+
 ```
 
 ### THETASTAT
 
 ```
-for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+# for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
+# for dataset in bi-18sp bi-mh no-18rh no-18sp no-mh ns-mh sk-17sp sk-18rh sk-18sp sk-mh; do
+# for dataset in bi-18sp bi-mh no-18rh no-18sp ns-mh sk-17sp sk-18rh sk-18sp sk-mh; do
+for dataset in no-mh; do
     sbatch \
         --job-name=${dataset}.dosafpest \
         --output=logs/diversity/dosafpest.${dataset}.out \
@@ -223,5 +244,20 @@ for dataset in sk-17sp sk-18rh sk-18sp sk-mh ns-ah ns-18rh ns-18sp ns-mh; do
         -a data/diversity/output/${dataset}.folded.thetas.bed \
         -b data/angsd_matrix/sites/supplementary_file_7.v2.bed \
         > data/diversity/output/${dataset}.supplementary_file_7.v2.bed
+done
+```
+
+
+## INDIVIDUAL HETEROZYGOSITY BUT USING SAME SITES FOR ALL INDIVIDUALS:
+
+step 1 - individual SAF + sites included (as bed)
+```
+for sample in $(cat data/bamlists/wp1_final_bal.sample_list.txt); do
+    echo "${sample}"
+    sbatch \
+        --job-name=${sample}.indsaf \
+        --output=logs/diversity/indsaf.${sample}.out \
+        --error=logs/diversity/indsaf.${sample}.err \
+        src/diversity/angsd_saf_individual_and_sites.sh ${sample}
 done
 ```
