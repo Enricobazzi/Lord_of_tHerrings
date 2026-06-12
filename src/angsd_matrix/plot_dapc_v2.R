@@ -114,7 +114,15 @@ plot_dapc <- function(dapc_obj, metadata, color_by = "region") {
     scale_fill_manual(values = c(colpal)) +
     scale_color_manual(values = c(colpal)) +
     scale_shape_manual(values = time_shapes) +
-    theme_minimal(base_size = 7) # + theme(legend.position = "none")
+    theme_minimal() +
+    theme(
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 11),
+      axis.title = element_text(size = 11),
+      axis.text = element_text(size = 9),
+      legend.key.size = unit(0.3, "cm"),
+      legend.spacing.y = unit(0, "cm")
+    )
   return(dapc_plot)
 }
 

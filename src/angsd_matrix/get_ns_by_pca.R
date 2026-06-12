@@ -74,7 +74,6 @@ get_fancy_region <- function(region) {
   return(gsub("_", " ", region))
 }
 
-
 # palette of colors
 colpal <- c(
   "Bothnia" = "#440154FF",
@@ -146,18 +145,27 @@ pcvar <- get_percent_variance(matrix)
 # density
 
 
-pca <- ggplot(data = plt_df, aes(x = PC1, y = PC2, color = Inversion, fill = Inversion, shape = Period)) +
+pca <- ggplot(data = plt_df, aes(x = PC1, y = PC2, color = Region, fill = Region, shape = Period)) +
   geom_point(alpha = 0.7, size = 2) +
   geom_vline(xintercept = c(0, 0.06), linewidth = 0.3) +
   scale_fill_manual(values = c(colpal)) +
   scale_color_manual(values = c(colpal)) +
   scale_shape_manual(values = time_shapes) +
   xlab(paste0("PC1 (", round(pcvar[1], 1), "%)")) + ylab(paste0("PC2 (", round(pcvar[2], 1), "%)")) +
-  theme_bw()
+  theme_bw() +
+  theme(
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 11),
+    axis.title = element_text(size = 11),
+    axis.text = element_text(size = 9),
+    legend.key.size = unit(0.3, "cm"),
+    legend.spacing.y = unit(0, "cm")
+  )
+
 
 ggsave(
   filename = paste0("plots/angsd_matrix/dapc/", dapc_dataset, ".", sites_name, ".pca.png"),
-  plot = pca, width = 90, height = 75, unit = "mm", dpi = 300
+  plot = pca, width = 180, height = 90, unit = "mm", dpi = 300
 )
 
 write.table(plt_df,
