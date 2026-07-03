@@ -1,3 +1,9 @@
+# install.packages("src/rdaforest/RDA-forest-main/extendedForest_1.6.2.1.tar.gz", repos = NULL, type = "source")
+# install.packages("src/rdaforest/RDA-forest-main/gradientForest_0.1-37.tar.gz", repos = NULL, type = "source")
+# https://cran.r-project.org/src/contrib/Archive/clv/clv_0.3-2.4.tar.gz
+# install.packages("src/rdaforest/RDA-forest-main/clv_0.3-2.4.tar.gz", repos = NULL, type = "source")
+# install.packages("src/rdaforest/RDA-forest-main/RDAforest_2.6.9.tar.gz")
+
 library(RDAforest)
 library(tidyverse)
 library(sdmpredictors)
@@ -98,9 +104,9 @@ get_sample_latlon <- function(sample) {
 }
 
 # dummy arguments
-all_samples_name <- "wp1_all"
+all_samples_name <- "full_herr"
 model_samples_name <- "wp1_modern"
-sites_name <- "sf7_sites"
+sites_name <- "supplementary_file_7.v2"
 
 # load samples - full set (complete matrix) and model set (used for modelling)
 all_samples_file <- paste0("data/angsd_matrix/bamlists/", all_samples_name, ".sample_list.txt")
@@ -124,7 +130,7 @@ distGCD <- gcd.dist(latlon)[[2]]
 envc <- build_envc(layer_labels = colnames(env))
 
 # build dist matrix from covariance matrix file
-matrix_file <- paste0("data/angsd_matrix/", all_samples_name, ".", sites_name, ".pcangsd.cov")
+matrix_file <- paste0("data/angsd_matrix/pcangsd/", all_samples_name, ".", sites_name, ".pcangsd.cov")
 cordist <- get_dist_matrix(matrix_file, model_samples, all_samples)
 
 # run RDA forest
@@ -182,7 +188,7 @@ dev.off()
 # plot turnovers
 rast_turnovers <- rasterFromXYZ(cbind(xy2, turnovers))
 # ... to be continued
-
+plot(rast_turnovers)
 ## run rda forest using leave one out strategy
 #for (i in seq_along(model_samples)){
 for (i in 137:165){
