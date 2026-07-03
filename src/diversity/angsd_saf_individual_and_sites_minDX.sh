@@ -20,20 +20,22 @@ OUT=data/diversity/output
 
 # arg
 sample=${1}
+minDepth=${2}
 
 # vars
 bam=data/bams/${sample}.subsampled_3X.noreps_noinvs.bam
 
 # run angsd
 angsd -P ${THREADS} -i ${bam} -ref ${REF} -anc ${REF} \
-    -out ${OUT}/${sample}.het_notrans \
-    -doCounts 1 -setMaxDepth 10 -setMinDepth 2 \
+    -out ${OUT}/${sample}.het_notrans.minDepth${minDepth} \
+    -doCounts 1 -setMaxDepth 10 -setMinDepth ${minDepth} \
     -minQ 30 -minmapQ 30 -C 50 -noTrans 1 -doSaf 1 -GL 1
 
 # calculate sites included
-realSFS print ${OUT}/${sample}.het_notrans.saf.idx | \
-    cut -f1,2 | awk '{print $1, $2-1, $2}' > ${OUT}/${sample}.positions.bed
+realSFS print ${OUT}/${sample}.het_notrans.minDepth${minDepth}.saf.idx | \
+    cut -f1,2 | awk '{print $1, $2-1, $2}' | tr ' ' '\t' | bedtools merge 
+    > ${OUT}/${sample}.minDepth${minDepth}.positions.merged.bed
 
 # run realSFS
-realSFS ${OUT}/${sample}.het_notrans.saf.idx \
-    -maxiter 2000 -tole 1e-16 > ${OUT}/${sample}.het_notrans.ml
+realSFS ${OUT}/${sample}.het_notrans.minDepth${minDepth}.saf.idx \
+    -maxiter 2000 -tole 1e-16 > ${OUT}/${sample}.het_notrans.minDepth${minDepth}.ml
