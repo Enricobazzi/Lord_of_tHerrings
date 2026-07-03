@@ -107,8 +107,23 @@ for (dataset in datasets){
 
 library(tidyverse)
 
+# palette of colors
+colpal <- c(
+  "Bothnia" = "#440154FF",
+  "Baltic" = "#1b639e",
+  "South_Baltic" = "navyblue",
+  "Switzerland" = "grey",
+  "Finland_Gulf" = "blue",
+  "Belt" = "#71D0F5FF",
+  "Skagerrak_&_Kattegat" = "#b370b2",
+  "North_Sea" = "#ED3911",
+  "Britain_&_Ireland" = "#91331FFF",
+  "Norway" = "#02d97c",
+  "North_Atlantic" = "#FED439FF"
+)
+
 pcangsd_dataset <- "full_herr"
-dataset <- "wp1_final_bal"
+dataset <- "full_herr"
 
 # get sample names for a dataset from the sample_list file:
 get_samples_from_dataset <- function(dataset) {
@@ -158,11 +173,50 @@ het_df <- data.frame(
   Region = metadata$region,
   Period = metadata$period,
   Year = metadata$year,
-  Stock = sapply(metadata$sample_id, get_sample_stock,
-                 stock_df = get_stock_df(pcangsd_dataset, dataset),
-                 USE.NAMES = FALSE),
+  x = metadata$x,
+  y = metadata$y,
+#   Stock = sapply(metadata$sample_id, get_sample_stock,
+#                  stock_df = get_stock_df(pcangsd_dataset, dataset),
+#                  USE.NAMES = FALSE),
   Heterozygosity = unlist(lapply(metadata$sample_id, get_het))
 )
+
+het_df$Region <- factor(het_df$Region, levels = names(colpal))
+het_df$Period <- factor(het_df$Period)
+
+ggplot(het_df, aes(x = Year, y = Heterozygosity,
+                   fill = Region, shape = Period)) +
+  geom_point(size = 2, colour = "black", stroke = 0.4) +
+  scale_y_log10(
+    breaks = c(1e-4, 1e-3, 1e-2, 1e-1),
+    labels = scales::label_percent(accuracy = 0.01)
+  ) +
+  scale_shape_manual(values = c(24, 21, 24, 22, 23)) +
+  scale_fill_manual(values = colpal) +
+  guides(y = guide_axis_logticks(), 
+         fill = guide_legend(override.aes = list(shape = 21, colour = "black"))
+  ) +
+  theme_bw()
+
+
+ggplot(het_df |> filter(Year > 1805), aes(x = Year, y = Heterozygosity,
+                   fill = Region, shape = Period)) +
+  geom_point(size = 2, colour = "black", stroke = 0.4) +
+  scale_y_log10(
+    breaks = c(1e-4, 1e-3, 1e-2, 1e-1),
+    labels = scales::label_percent(accuracy = 0.01)
+  ) +
+  scale_shape_manual(values = c(24, 21, 24, 22, 23)) +
+  scale_fill_manual(values = colpal) +
+  guides(y = guide_axis_logticks(), 
+         fill = guide_legend(override.aes = list(shape = 21, colour = "black"))
+  ) +
+  theme_bw()
+
+
+#####
+
+
 stock <- "Skagerrak & Kattegat Spring-Spawner"
 stock <- "Norwegian Spring-Spawner"
 stock <- "North Sea Autumn-Spawner"
