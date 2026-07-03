@@ -198,12 +198,12 @@ plot_pca <- function(pca_df, variance_explained, pc_x = 1, pc_y = 2, labels = TR
 read_arguments <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   if (length(args) != 3) {
-    "running with default arguments:
-    all_samples_name <- 'full_herr'
-    subset_samples_name <- 'wp1_final_bal'
-    sites_name <- 'spring_v_autumn.v2'"
+    print("running with default arguments:")
+    print("all_samples_name <- 'full_herr'")
+    print("subset_samples_name <- 'wp1_final_bal'")
+    print("sites_name <- 'spring_v_autumn.v2'")
   } else if (length(args) == 3) {
-    "running with user provided arguments"
+    print("running with user provided arguments")
   } else if (length(args) > 3) {
     stop("too many arguments provided")
   }
