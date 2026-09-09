@@ -255,12 +255,23 @@ individual SAF + sites included (as bed) with minimum depth of 2, 3, 4
 for sample in $(cat data/bamlists/full_herr.sample_list.txt); do
     echo "${sample}"
     sbatch \
-        --job-name=${sample}.indsaf \
-        --output=logs/diversity/indsaf.${sample}.out \
-        --error=logs/diversity/indsaf.${sample}.err \
-        src/diversity/angsd_saf_individual_and_sites_minDX.sh ${sample}
+        --job-name=${sample}.indhet \
+        --output=logs/diversity/indhet.${sample}.out \
+        --error=logs/diversity/indhet.${sample}.err \
+        src/diversity/angsd_saf_individual_and_sites_minDX.sh ${sample} 4
 done
 ```
+get the table:
+```
+minDepth=4
+for sample in $(cat data/bamlists/full_herr.sample_list.txt); do
+    paste \
+        <(echo ${sample}) \
+        <(awk '{sum += $3 - $2} END {print sum}' data/diversity/output/${sample}.minDepth4.positions.merged.bed) \
+        <(awk '{print $2 / ($1 + $2 + $3)}' data/diversity/output/${sample}.het_notrans.minDepth${minDepth}.ml)
+done
+```
+
 
 do a bed of 5kb windows along the genome -> 145147 windows
 ```
@@ -284,4 +295,43 @@ for N in {1..145147}; do
 done
 
 cat ${sample}.5kb_win.het | awk '{print ($1 + $2 + $3) ":" " " $2 / ($1 + $2 + $3)}'
+```
+
+## RELATIVE HETEROZYGOSITY
+
+```
+# load software
+ml angsd
+ml bedtools
+
+# constants
+THREADS=8
+REF=Reference/GCF_900700415.2_Ch_v2.0.2_genomic.fna
+OUT=data/diversity/output
+
+# arg
+rsam=MHER035
+tsam=ND031
+tsam=ND331
+minDepth=4
+
+rsaf=${OUT}/${rsam}.het_notrans.minDepth${minDepth}.saf.idx
+tbed=${OUT}/${tsam}.minDepth${minDepth}.positions.merged.bed
+angsd sites index ${tbed}
+angsd sites index tbed
+
+# run realSFS
+realSFS ${rsaf} -sites ${tbed} \
+    -maxiter 2000 -tole 1e-16 \
+    > test.relhet2
+
+realSFS ${rsaf} -sites tbed \
+    -maxiter 2000 -tole 1e-16 \
+    > test.relhet2
+
+# awk '{print $2 / ($1 + $2 + $3)}' test.relhet 
+awk '{print $2 / ($1 + $2 + $3)}' test.relhet2
+awk '{print $2 / ($1 + $2 + $3)}' ${OUT}/${rsam}.het_notrans.minDepth4.ml
+# awk '{print $2 / ($1 + $2 + $3)}' ${OUT}/${tsam}.het_notrans.minDepth4.ml
+
 ```
