@@ -3,7 +3,7 @@
 #SBATCH -p shared
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH -t 0-02:00:00
+#SBATCH -t 0-04:00:00
 #SBATCH --mem=32G
 
 # from https://github.com/erikrfunk/PPM_env-correlates
@@ -12,6 +12,7 @@
 
 # load software
 ml angsd
+ml bedtools
 
 # constants
 THREADS=8
@@ -33,7 +34,7 @@ angsd -P ${THREADS} -i ${bam} -ref ${REF} -anc ${REF} \
 
 # calculate sites included
 realSFS print ${OUT}/${sample}.het_notrans.minDepth${minDepth}.saf.idx | \
-    cut -f1,2 | awk '{print $1, $2-1, $2}' | tr ' ' '\t' | bedtools merge 
+    cut -f1,2 | awk '{print $1, $2-1, $2}' | tr ' ' '\t' | bedtools merge \
     > ${OUT}/${sample}.minDepth${minDepth}.positions.merged.bed
 
 # run realSFS
